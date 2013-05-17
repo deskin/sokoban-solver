@@ -3,8 +3,9 @@ ifeq ($(origin CC),default)
 endif
 
 SOURCES = sokoban.cpp
+OBJS = $(patsubst %.cpp,%.o,$(SOURCES))
 EXE = sokoban.exe
-LINKLIBS=-lstdc++
+LIBS=-lstdc++
 
 ifeq ($(CC),clang)
     INCLUDES = -I/usr/lib/gcc/i686-pc-cygwin/4.7.2/include -I/usr/lib/gcc/i686-pc-cygwin/4.7.2/include/c++ -I/usr/lib/gcc/i686-pc-cygwin/4.7.2/include/c++/i686-pc-cygwin
@@ -15,10 +16,12 @@ endif
 
 all: $(EXE)
 
-$(EXE): $(SOURCES)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $(EXE) $(SOURCES) $(LINKLIBS)
+$(EXE): $(OBJS)
+	$(CC) $(LDFLAGS) -o $(EXE) $(OBJS) $(LIBS)
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
 .PHONY: clean
 clean:
-	-rm -f $(EXE)
-#clang -std=c++11 -I/usr/lib/gcc/i686-pc-cygwin/4.7.2/include -I/usr/lib/gcc/i686-pc-cygwin/4.7.2/include/c++ -I/usr/lib/gcc/i686-pc-cygwin/4.7.2/include/c++/i686-pc-cygwin sokoban.cpp -lstdc++
+	-rm -f $(EXE) $(OBJS)

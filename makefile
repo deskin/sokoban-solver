@@ -3,9 +3,12 @@ ifeq ($(origin CC),default)
 endif
 
 OBJDIR = bin
+DEPDIR = $(OBJDIR)/deps
 SOURCES = sokoban.cpp
 OBJS = $(patsubst %.cpp,%.o,$(SOURCES))
 OBJPATHS = $(addprefix $(OBJDIR)/,$(OBJS))
+DEPS = $(patsubst %.cpp,%.dep,$(SOURCES))
+DEPPATHS = $(addprefix $(DEPDIR)/,$(DEPS))
 EXE = sokoban.exe
 EXEPATH = $(addprefix $(OBJDIR)/,$(EXE))
 LIBS=-lstdc++
@@ -24,12 +27,22 @@ $(EXEPATH): $(OBJPATHS)
 
 $(OBJPATHS): | $(OBJDIR)
 
-$(OBJDIR):
+$(DEPPATHS): makefile | $(DEPDIR)
+
+$(DEPDIR): | $(OBJDIR)
+
+$(OBJDIR) $(DEPDIR):
 	mkdir $@
 
 $(OBJDIR)/%.o: %.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
+$(DEPDIR)/%.dep: %.cpp
+	$(CC) $(INCLUDES) -M $< | sed -e "1{s+^\([^:]*\).o:+$(OBJDIR)/\1.o $@:+}" > $@
+
 .PHONY: clean
 clean:
-	-rm -f $(OBJDIR)/*
+	-rm -rf $(OBJDIR)/*
+
+include $(DEPPATHS)
+

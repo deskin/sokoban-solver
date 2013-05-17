@@ -1,4 +1,7 @@
-CC ?= clang
+ifeq ($(origin CC),default)
+    CC = clang
+endif
+
 SOURCES = sokoban.cpp
 EXE = sokoban.exe
 LINKLIBS=-lstdc++

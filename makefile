@@ -2,9 +2,12 @@ ifeq ($(origin CC),default)
     CC = clang
 endif
 
+OBJDIR = bin
 SOURCES = sokoban.cpp
 OBJS = $(patsubst %.cpp,%.o,$(SOURCES))
+OBJPATHS = $(addprefix $(OBJDIR)/,$(OBJS))
 EXE = sokoban.exe
+EXEPATH = $(addprefix $(OBJDIR)/,$(EXE))
 LIBS=-lstdc++
 
 ifeq ($(CC),clang)
@@ -14,14 +17,19 @@ else ifeq ($(CC),gcc)
     CFLAGS = -std=c++0x
 endif
 
-all: $(EXE)
+all: $(EXEPATH)
 
-$(EXE): $(OBJS)
-	$(CC) $(LDFLAGS) -o $(EXE) $(OBJS) $(LIBS)
+$(EXEPATH): $(OBJPATHS)
+	$(CC) $(LDFLAGS) -o $(EXEPATH) $(OBJPATHS) $(LIBS)
 
-%.o: %.cpp
+$(OBJPATHS): | $(OBJDIR)
+
+$(OBJDIR):
+	mkdir $@
+
+$(OBJDIR)/%.o: %.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
 .PHONY: clean
 clean:
-	-rm -f $(EXE) $(OBJS)
+	-rm -f $(OBJDIR)/*

@@ -3,15 +3,25 @@ ifeq ($(origin CC),default)
 endif
 
 OBJDIR = bin
+TESTOBJDIR = $(OBJDIR)/test
 DEPDIR = $(OBJDIR)/deps
+TESTDEPDIR = $(TESTOBJDIR)/deps
 SOURCES = sokoban.cpp
+TESTSRC = test.cpp test2.cpp
 OBJS = $(patsubst %.cpp,%.o,$(SOURCES))
 OBJPATHS = $(addprefix $(OBJDIR)/,$(OBJS))
 DEPS = $(patsubst %.cpp,%.dep,$(SOURCES))
 DEPPATHS = $(addprefix $(DEPDIR)/,$(DEPS))
+TESTOBJS = $(patsubst %.cpp,%.o,$(TESTSRC))
+TESTOBJPATHS = $(addprefix $(TESTOBJDIR)/,$(TESTOBJS))
+DEPS = $(patsubst %.cpp,%.dep,$(TESTSRC))
+DEPPATHS = $(addprefix $(TESTDEPDIR)/,$(TESTDEPS))
 EXE = sokoban.exe
 EXEPATH = $(addprefix $(OBJDIR)/,$(EXE))
-LIBS=-lstdc++
+TESTEXE = test.exe
+TESTEXEPATH = $(addprefix $(OBJDIR)/,$(TESTEXE))
+LIBS = -lstdc++
+TESTLIBS = -lboost_unit_test_framework-mt
 
 WARNFLAGS ?= -Wall -Werror
 OPTFLAGS ?=
@@ -24,27 +34,47 @@ endif
 
 all: $(EXEPATH)
 
+.PHONY: test
+test: $(TESTEXEPATH)
+	$(TESTEXEPATH)
+
 $(EXEPATH): $(OBJPATHS)
 	$(CC) $(LDFLAGS) -o $(EXEPATH) $(OBJPATHS) $(LIBS)
 
+$(TESTEXEPATH): $(TESTOBJPATHS)
+	$(CC) $(LDFLAGS) -o $@ $(TESTOBJPATHS) $(LIBS) $(TESTLIBS)
+
 $(OBJPATHS): | $(OBJDIR)
+
+$(TESTOBJPATHS): | $(TESTOBJDIR)
 
 $(DEPPATHS): makefile | $(DEPDIR)
 
-$(DEPDIR): | $(OBJDIR)
+$(TESTDEPPATHS): makefile | $(TESTDEPDIR)
 
-$(OBJDIR) $(DEPDIR):
+$(DEPDIR) $(TESTOBJDIR): | $(OBJDIR)
+
+$(TESTDEPDIR): | $(TESTOBJDIR)
+
+$(OBJDIR) $(DEPDIR) $(TESTOBJDIR) $(TESTDEPDIR):
 	mkdir $@
 
 $(OBJDIR)/%.o: %.cpp
 	$(CC) $(ALL_CFLAGS) $(INCLUDES) -c -o $@ $<
 
+$(TESTOBJDIR)/%.o: %.cpp
+	$(CC) $(ALL_CFLAGS) $(INCLUDES) -c -o $@ $<
+
 $(DEPDIR)/%.dep: %.cpp
 	$(CC) $(INCLUDES) -M $< | sed -e "1{s+^\([^:]*\).o:+$(OBJDIR)/\1.o $@:+}" > $@
+
+$(TESTDEPDIR)/%.dep: %.cpp
+	$(CC) $(INCLUDES) -M $< | sed -e "1{s+^\([^:]*\).o:+$(TESTOBJDIR)/\1.o $@:+}" > $@
 
 .PHONY: clean
 clean:
 	-rm -rf $(OBJDIR)/*
 
 include $(DEPPATHS)
+include $(TESTDEPPATHS)
 

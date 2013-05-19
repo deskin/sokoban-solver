@@ -67,10 +67,10 @@ $(TESTOBJDIR)/%.o: $(TESTSRCDIR)/%.cpp
 	$(CC) $(ALL_CFLAGS) $(INCLUDES) -c -o $@ $<
 
 $(DEPDIR)/%.dep: %.cpp
-	$(CC) $(INCLUDES) -M $< | sed -e "1{s+^\([^:]*\).o:+$(OBJDIR)/\1.o $@:+}" > $@
+	$(CC) $(INCLUDES) -M $< | sed -e "1{s+^\([^:]*\)[.]o:+$(OBJDIR)/\1.o $@:+}" > $@
 
 $(TESTDEPDIR)/%.dep: $(TESTSRCDIR)/%.cpp
-	$(CC) $(INCLUDES) -M $< | sed -e "1{s+^\([^:]*\).o:+$(TESTOBJDIR)/\1.o $@:+}" > $@
+	$(CC) $(INCLUDES) -M $< | sed -e "1{s+^\([^:]*\)[.]o:+$(TESTOBJDIR)/\1.o $@:+}" > $@
 
 .PHONY: clean
 clean:

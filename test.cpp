@@ -5,5 +5,5 @@
 
 BOOST_AUTO_TEST_CASE(tautology_test) {
 	BOOST_CHECK_EQUAL(0, 0);
-	BOOST_CHECK_EQUAL(1, 0);
+	BOOST_CHECK_NE(1, 0);
 }

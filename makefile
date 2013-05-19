@@ -4,17 +4,18 @@ endif
 
 OBJDIR = bin
 TESTOBJDIR = $(OBJDIR)/test
+TESTSRCDIR = test
 DEPDIR = $(OBJDIR)/deps
 TESTDEPDIR = $(TESTOBJDIR)/deps
 SOURCES = sokoban.cpp
-TESTSRC = test.cpp test2.cpp
+TESTSRC = $(wildcard $(TESTSRCDIR)/*.cpp)
 OBJS = $(patsubst %.cpp,%.o,$(SOURCES))
 OBJPATHS = $(addprefix $(OBJDIR)/,$(OBJS))
 DEPS = $(patsubst %.cpp,%.dep,$(SOURCES))
 DEPPATHS = $(addprefix $(DEPDIR)/,$(DEPS))
-TESTOBJS = $(patsubst %.cpp,%.o,$(TESTSRC))
+TESTOBJS = $(patsubst %.cpp,%.o,$(notdir $(TESTSRC)))
 TESTOBJPATHS = $(addprefix $(TESTOBJDIR)/,$(TESTOBJS))
-TESTDEPS = $(patsubst %.cpp,%.dep,$(TESTSRC))
+TESTDEPS = $(patsubst %.cpp,%.dep,$(notdir $(TESTSRC)))
 TESTDEPPATHS = $(addprefix $(TESTDEPDIR)/,$(TESTDEPS))
 EXE = sokoban.exe
 EXEPATH = $(addprefix $(OBJDIR)/,$(EXE))
@@ -39,7 +40,7 @@ test: $(TESTEXEPATH)
 	$(TESTEXEPATH)
 
 $(EXEPATH): $(OBJPATHS)
-	$(CC) $(LDFLAGS) -o $(EXEPATH) $(OBJPATHS) $(LIBS)
+	$(CC) $(LDFLAGS) -o $@ $(OBJPATHS) $(LIBS)
 
 $(TESTEXEPATH): $(TESTOBJPATHS)
 	$(CC) $(LDFLAGS) -o $@ $(TESTOBJPATHS) $(LIBS) $(TESTLIBS)
@@ -62,13 +63,13 @@ $(OBJDIR) $(DEPDIR) $(TESTOBJDIR) $(TESTDEPDIR):
 $(OBJDIR)/%.o: %.cpp
 	$(CC) $(ALL_CFLAGS) $(INCLUDES) -c -o $@ $<
 
-$(TESTOBJDIR)/%.o: %.cpp
+$(TESTOBJDIR)/%.o: $(TESTSRCDIR)/%.cpp
 	$(CC) $(ALL_CFLAGS) $(INCLUDES) -c -o $@ $<
 
 $(DEPDIR)/%.dep: %.cpp
 	$(CC) $(INCLUDES) -M $< | sed -e "1{s+^\([^:]*\).o:+$(OBJDIR)/\1.o $@:+}" > $@
 
-$(TESTDEPDIR)/%.dep: %.cpp
+$(TESTDEPDIR)/%.dep: $(TESTSRCDIR)/%.cpp
 	$(CC) $(INCLUDES) -M $< | sed -e "1{s+^\([^:]*\).o:+$(TESTOBJDIR)/\1.o $@:+}" > $@
 
 .PHONY: clean

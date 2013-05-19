@@ -1,9 +1,13 @@
-#define BOOST_TEST_MODULE basic test
+#define BOOST_TEST_MODULE sokoban tests
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
+#include "level.h"
 
-BOOST_AUTO_TEST_CASE(tautology_test) {
-	BOOST_CHECK_EQUAL(0, 0);
-	BOOST_CHECK_NE(1, 0);
+BOOST_AUTO_TEST_SUITE(level)
+
+BOOST_AUTO_TEST_CASE(construct) {
+	sokoban::level l;
 }
+
+BOOST_AUTO_TEST_SUITE_END()

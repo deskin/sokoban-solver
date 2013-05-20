@@ -7,7 +7,7 @@ namespace sokoban {
 
 class level {
 public:
-	void parse(const std::string &) {}
+	void parse(const std::string &s);
 };
 
 } // namespace sokoban

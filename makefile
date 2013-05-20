@@ -7,11 +7,15 @@ TESTOBJDIR = $(OBJDIR)/test
 TESTSRCDIR = test
 DEPDIR = $(OBJDIR)/deps
 TESTDEPDIR = $(TESTOBJDIR)/deps
-SOURCES = sokoban.cpp
+ALL_SRC = $(wildcard *.cpp)
+MAIN_SRC = sokoban.cpp
+SOURCES = $(filter-out $(MAIN_SRC),$(ALL_SRC))
 TESTSRC = $(wildcard $(TESTSRCDIR)/*.cpp)
+ALL_OBJS = $(patsubst %.cpp,%.o,$(ALL_SRC))
 OBJS = $(patsubst %.cpp,%.o,$(SOURCES))
+ALL_OBJPATHS = $(addprefix $(OBJDIR)/,$(ALL_OBJS))
 OBJPATHS = $(addprefix $(OBJDIR)/,$(OBJS))
-DEPS = $(patsubst %.cpp,%.dep,$(SOURCES))
+DEPS = $(patsubst %.cpp,%.dep,$(ALL_SRC))
 DEPPATHS = $(addprefix $(DEPDIR)/,$(DEPS))
 TESTOBJS = $(patsubst %.cpp,%.o,$(notdir $(TESTSRC)))
 TESTOBJPATHS = $(addprefix $(TESTOBJDIR)/,$(TESTOBJS))
@@ -40,13 +44,13 @@ all: $(EXEPATH)
 test: $(TESTEXEPATH)
 	$(TESTEXEPATH)
 
-$(EXEPATH): $(OBJPATHS)
-	$(CC) $(LDFLAGS) -o $@ $(OBJPATHS) $(LIBS)
+$(EXEPATH): $(ALL_OBJPATHS)
+	$(CC) $(LDFLAGS) -o $@ $(ALL_OBJPATHS) $(LIBS)
 
-$(TESTEXEPATH): $(TESTOBJPATHS)
-	$(CC) $(LDFLAGS) -o $@ $(TESTOBJPATHS) $(LIBS) $(TESTLIBS)
+$(TESTEXEPATH): $(OBJPATHS) $(TESTOBJPATHS)
+	$(CC) $(LDFLAGS) -o $@ $(OBJPATHS) $(TESTOBJPATHS) $(LIBS) $(TESTLIBS)
 
-$(OBJPATHS): | $(OBJDIR)
+$(ALL_OBJPATHS): | $(OBJDIR)
 
 $(TESTOBJPATHS): | $(TESTOBJDIR)
 

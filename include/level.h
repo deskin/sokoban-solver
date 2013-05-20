@@ -1,5 +1,5 @@
-#ifndef LEVEL_H_
-#define LEVEL_H_
+#ifndef SOKOBAN_LEVEL_H_
+#define SOKOBAN_LEVEL_H_
 
 #include <string>
 
@@ -12,4 +12,4 @@ public:
 
 } // namespace sokoban
 
-#endif // LEVEL_H_
+#endif // SOKOBAN_LEVEL_H_

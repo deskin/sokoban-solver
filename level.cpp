@@ -15,7 +15,7 @@ level::parse(const std::string &s)
 		}
 	}
 
-	if (avatar_count > 1) {
+	if (avatar_count != 1) {
 		throw level_parse_exception();
 	}
 }

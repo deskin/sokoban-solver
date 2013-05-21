@@ -18,9 +18,9 @@ BOOST_AUTO_TEST_CASE(parse) {
 	BOOST_CHECK_NO_THROW(level.parse(s));
 }
 
-BOOST_AUTO_TEST_CASE(parse_too_many_men) {
+BOOST_AUTO_TEST_CASE(parse_too_many_avatars) {
 	sokoban::level level;
-	std::string s("@@");
+	std::string s("@@`^");
 	BOOST_CHECK_THROW(level.parse(s), sokoban::level_parse_exception);
 }
 

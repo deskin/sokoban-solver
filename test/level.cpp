@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_CASE(parse_not_enough_rocks) {
 	BOOST_CHECK_THROW(level.parse(s), sokoban::level_parse_exception);
 }
 
-BOOST_AUTO_TEST_CASE(parse_get_avatar) {
+BOOST_AUTO_TEST_CASE(parse_get_avatar_0_0) {
 	sokoban::level level;
 	std::string s("@`^\n"
 		      ".`^");

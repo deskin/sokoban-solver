@@ -15,10 +15,6 @@ level::parse(const std::string &s)
 
 	for (const char &c : s) {
 		if (c == '@') {
-			if (avatar_count != 0) {
-				throw level_parse_exception();
-			}
-
 			++avatar_count;
 			avatar_position.first = row;
 			avatar_position.second = column;

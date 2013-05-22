@@ -2,7 +2,10 @@
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
+
 #include <string>
+#include <utility>
+
 #include "errors.h"
 #include "level.h"
 
@@ -41,8 +44,7 @@ BOOST_AUTO_TEST_CASE(parse_get_avatar) {
 	std::string s("@`^\n"
 		      ".`^");
 	BOOST_CHECK_NO_THROW(level.parse(s));
-	const std::pair<size_t, size_t> &pos(
-		level.avatar());
+	const std::pair<size_t, size_t> &pos(level.avatar());
 	BOOST_CHECK_EQUAL(pos.first, 0);
 	BOOST_CHECK_EQUAL(pos.second, 0);
 }

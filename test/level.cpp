@@ -59,4 +59,9 @@ BOOST_AUTO_TEST_CASE(parse_get_avatar_2_1) {
 	BOOST_CHECK_EQUAL(pos.second, 1);
 }
 
+BOOST_AUTO_TEST_CASE(no_parse_avatar_throws) {
+	sokoban::level level;
+	BOOST_CHECK_THROW(level.avatar(), sokoban::level_not_loaded);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

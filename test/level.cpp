@@ -49,4 +49,14 @@ BOOST_AUTO_TEST_CASE(parse_get_avatar) {
 	BOOST_CHECK_EQUAL(pos.second, 0);
 }
 
+BOOST_AUTO_TEST_CASE(parse_get_avatar_2_1) {
+	sokoban::level level;
+	std::string s("^`.\n"
+		      "^`@");
+	BOOST_CHECK_NO_THROW(level.parse(s));
+	const sokoban::level::position_type &pos(level.avatar());
+	BOOST_CHECK_EQUAL(pos.first, 2);
+	BOOST_CHECK_EQUAL(pos.second, 1);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

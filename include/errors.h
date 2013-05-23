@@ -7,6 +7,8 @@ namespace sokoban {
 
 class level_parse_exception : public std::exception {};
 
+class level_not_loaded : public std::exception {};
+
 } // namespace sokoban
 
 #endif //SOKOBAN_ERRORS_H_

@@ -39,6 +39,8 @@ level::parse(const std::string &s)
 	if (rock_count < pit_count) {
 		throw level_parse_exception();
 	}
+
+	level_is_parsed = true;
 }
 
 } // namespace sokoban

@@ -3,6 +3,8 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 
+#include <algorithm>
+#include <set>
 #include <string>
 #include <utility>
 
@@ -62,6 +64,19 @@ BOOST_AUTO_TEST_CASE(parse_get_avatar_2_1) {
 BOOST_AUTO_TEST_CASE(no_parse_avatar_throws) {
 	sokoban::level level;
 	BOOST_CHECK_THROW(level.avatar(), sokoban::level_not_loaded);
+}
+
+BOOST_AUTO_TEST_CASE(get_pits) {
+	sokoban::level level;
+	std::string s("@`^");
+	BOOST_REQUIRE_NO_THROW(level.parse(s));
+	std::set<const sokoban::level::position_type> &pits =
+		level.pits();
+	BOOST_CHECK(
+		pits.cend() != std::find(
+			pits.cbegin(),
+			pits.cend(),
+			std::make_pair<size_t, size_t>(2, 0)));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

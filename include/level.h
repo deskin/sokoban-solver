@@ -10,6 +10,7 @@ namespace sokoban {
 class level {
 public:
 	typedef std::pair<size_t, size_t> position_type;
+	typedef std::set<position_type> positions_type;
 
 	level() :
 		level_is_parsed(false),
@@ -22,7 +23,7 @@ public:
 		return require_parsed_or_throw(avatar_position);
 	}
 
-	const std::set<position_type> &pits() const
+	const positions_type &pits() const
 	{
 		return require_parsed_or_throw(pit_locations);
 	}
@@ -32,7 +33,7 @@ public:
 private:
 	bool level_is_parsed;
 	position_type avatar_position;
-	std::set<position_type> pit_locations;
+	positions_type pit_locations;
 
 	template <typename T>
 	const T &require_parsed_or_throw(const T &val) const

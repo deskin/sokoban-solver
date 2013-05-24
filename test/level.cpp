@@ -78,4 +78,9 @@ BOOST_AUTO_TEST_CASE(get_pits) {
 			std::make_pair<size_t, size_t>(2, 0)));
 }
 
+BOOST_AUTO_TEST_CASE(no_parse_pits_throws) {
+	sokoban::level level;
+	BOOST_CHECK_THROW(level.pits(), sokoban::level_not_loaded);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -39,6 +39,10 @@ level::parse(const std::string &s)
 		throw level_parse_exception();
 	}
 
+	if (0 == pit_locations.size()) {
+		throw level_parse_exception();
+	}
+
 	is_parsed = true;
 }
 

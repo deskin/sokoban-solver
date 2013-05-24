@@ -28,6 +28,10 @@ public:
 
 	const std::set<position_type> &pits() const
 	{
+		if (!level_is_parsed) {
+			throw level_not_loaded();
+		}
+
 		return pit_locations;
 	}
 

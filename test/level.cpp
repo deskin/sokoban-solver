@@ -45,7 +45,7 @@ BOOST_AUTO_TEST_CASE(parse_get_avatar_0_0) {
 	sokoban::level level;
 	std::string s("@`^\n"
 		      ".`^");
-	BOOST_CHECK_NO_THROW(level.parse(s));
+	BOOST_REQUIRE_NO_THROW(level.parse(s));
 	const sokoban::level::position_type &pos(level.avatar());
 	BOOST_CHECK_EQUAL(pos.first, 0);
 	BOOST_CHECK_EQUAL(pos.second, 0);
@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(parse_get_avatar_2_1) {
 	sokoban::level level;
 	std::string s("^`.\n"
 		      "^`@");
-	BOOST_CHECK_NO_THROW(level.parse(s));
+	BOOST_REQUIRE_NO_THROW(level.parse(s));
 	const sokoban::level::position_type &pos(level.avatar());
 	BOOST_CHECK_EQUAL(pos.first, 2);
 	BOOST_CHECK_EQUAL(pos.second, 1);
@@ -70,8 +70,7 @@ BOOST_AUTO_TEST_CASE(get_pits) {
 	sokoban::level level;
 	std::string s("@`^");
 	BOOST_REQUIRE_NO_THROW(level.parse(s));
-	const std::set<sokoban::level::position_type> &pits =
-		level.pits();
+	const std::set<sokoban::level::position_type> &pits(level.pits());
 	BOOST_CHECK(
 		pits.cend() != std::find(
 			pits.cbegin(),

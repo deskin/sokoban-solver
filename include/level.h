@@ -15,7 +15,8 @@ public:
 	level() :
 		is_parsed(false),
 		avatar_position(0, 0),
-		pit_locations()
+		pit_locations(),
+		rock_locations()
 	{}
 
 	const position_type &avatar() const
@@ -28,12 +29,18 @@ public:
 		return require_parsed_or_throw(pit_locations);
 	}
 
+	const positions_type &rocks() const
+	{
+		return require_parsed_or_throw(rock_locations);
+	}
+
 	void parse(const std::string &s);
 
 private:
 	bool is_parsed;
 	position_type avatar_position;
 	positions_type pit_locations;
+	positions_type rock_locations;
 
 	template <typename T>
 	const T &require_parsed_or_throw(const T &val) const

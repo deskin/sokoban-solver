@@ -104,4 +104,9 @@ BOOST_AUTO_TEST_CASE(get_rocks) {
 
 }
 
+BOOST_AUTO_TEST_CASE(no_parse_rocks_throws) {
+	sokoban::level level;
+	BOOST_CHECK_THROW(level.rocks(), sokoban::level_not_loaded);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -109,4 +109,20 @@ BOOST_AUTO_TEST_CASE(no_parse_rocks_throws) {
 	BOOST_CHECK_THROW(level.rocks(), sokoban::level_not_loaded);
 }
 
+BOOST_AUTO_TEST_CASE(parse_combo_avatar) {
+	sokoban::level level;
+	std::string s("7`.\n"
+		      "...");
+	BOOST_REQUIRE_NO_THROW(level.parse(s));
+	const std::set<sokoban::level::position_type> &pits(level.pits());
+	BOOST_CHECK(
+		pits.cend() != std::find(
+			pits.cbegin(),
+			pits.cend(),
+			std::make_pair<size_t, size_t>(0, 0)));
+	const sokoban::level::position_type &pos(level.avatar());
+	BOOST_CHECK_EQUAL(pos.first, 0);
+	BOOST_CHECK_EQUAL(pos.second, 0);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

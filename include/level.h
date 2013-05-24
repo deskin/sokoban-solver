@@ -26,7 +26,7 @@ public:
 		return avatar_position;
 	}
 
-	const std::set<position_type> &pits()
+	const std::set<position_type> &pits() const
 	{
 		return pit_locations;
 	}

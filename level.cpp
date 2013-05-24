@@ -8,7 +8,6 @@ void
 level::parse(const std::string &s)
 {
 	size_t avatar_count = 0;
-	size_t pit_count = 0;
 	size_t rock_count = 0;
 	size_t column = 0;
 	size_t row = 0;
@@ -16,20 +15,19 @@ level::parse(const std::string &s)
 	for (const char &c : s) {
 		if (c == '@') {
 			++avatar_count;
-			avatar_position.first = row;
-			avatar_position.second = column;
+			avatar_position.first = column;
+			avatar_position.second = row;
 		} else if (c == '`') {
 			++rock_count;
 		} else if (c == '^') {
-			++pit_count;
-			pit_locations.insert(std::make_pair(row, column));
+			pit_locations.insert(std::make_pair(column, row));
 		}
 
 		if (c == '\n') {
-			++column;
-			row = 0;
-		} else {
 			++row;
+			column = 0;
+		} else {
+			++column;
 		}
 	}
 
@@ -37,7 +35,7 @@ level::parse(const std::string &s)
 		throw level_parse_exception();
 	}
 
-	if (rock_count < pit_count) {
+	if (rock_count < pit_locations.size()) {
 		throw level_parse_exception();
 	}
 

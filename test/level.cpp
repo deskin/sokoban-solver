@@ -89,4 +89,19 @@ BOOST_AUTO_TEST_CASE(no_pits_throws) {
 	BOOST_CHECK_THROW(level.parse(s), sokoban::level_parse_exception);
 }
 
+BOOST_AUTO_TEST_CASE(get_rocks) {
+	sokoban::level level;
+	std::string s("@. \n"
+		      " ..\n"
+		      "^`.");
+	BOOST_REQUIRE_NO_THROW(level.parse(s));
+	const std::set<sokoban::level::position_type> &rocks(level.rocks());
+	BOOST_CHECK(
+		rocks.cend() != std::find(
+			rocks.cbegin(),
+			rocks.cend(),
+			std::make_pair<size_t, size_t>(1, 2)));
+
+}
+
 BOOST_AUTO_TEST_SUITE_END()

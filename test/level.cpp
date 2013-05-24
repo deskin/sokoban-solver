@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE(get_pits) {
 	sokoban::level level;
 	std::string s("@`^");
 	BOOST_REQUIRE_NO_THROW(level.parse(s));
-	std::set<const sokoban::level::position_type> &pits =
+	const std::set<sokoban::level::position_type> &pits =
 		level.pits();
 	BOOST_CHECK(
 		pits.cend() != std::find(

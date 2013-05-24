@@ -19,20 +19,12 @@ public:
 
 	const position_type &avatar() const
 	{
-		if (!level_is_parsed) {
-			throw level_not_loaded();
-		}
-
-		return avatar_position;
+		return require_parsed_or_throw(avatar_position);
 	}
 
 	const std::set<position_type> &pits() const
 	{
-		if (!level_is_parsed) {
-			throw level_not_loaded();
-		}
-
-		return pit_locations;
+		return require_parsed_or_throw(pit_locations);
 	}
 
 	void parse(const std::string &s);
@@ -41,6 +33,18 @@ private:
 	bool level_is_parsed;
 	position_type avatar_position;
 	std::set<position_type> pit_locations;
+
+	template <typename T>
+	const T &require_parsed_or_throw(const T &val) const
+	{
+		if (!level_is_parsed) {
+			throw level_not_loaded();
+		}
+
+		return val;
+	}
+
+
 };
 
 } // namespace sokoban

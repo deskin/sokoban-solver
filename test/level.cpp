@@ -83,4 +83,10 @@ BOOST_AUTO_TEST_CASE(no_parse_pits_throws) {
 	BOOST_CHECK_THROW(level.pits(), sokoban::level_not_loaded);
 }
 
+BOOST_AUTO_TEST_CASE(no_pits_throws) {
+	sokoban::level level;
+	std::string s("@.");
+	BOOST_CHECK_THROW(level.parse(s), sokoban::level_parse_exception);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

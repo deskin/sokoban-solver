@@ -39,7 +39,7 @@ level::parse(const std::string &s)
 		throw level_parse_exception();
 	}
 
-	level_is_parsed = true;
+	is_parsed = true;
 }
 
 } // namespace sokoban

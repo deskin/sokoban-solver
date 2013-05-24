@@ -13,7 +13,7 @@ public:
 	typedef std::set<position_type> positions_type;
 
 	level() :
-		level_is_parsed(false),
+		is_parsed(false),
 		avatar_position(0, 0),
 		pit_locations()
 	{}
@@ -31,14 +31,14 @@ public:
 	void parse(const std::string &s);
 
 private:
-	bool level_is_parsed;
+	bool is_parsed;
 	position_type avatar_position;
 	positions_type pit_locations;
 
 	template <typename T>
 	const T &require_parsed_or_throw(const T &val) const
 	{
-		if (!level_is_parsed) {
+		if (!is_parsed) {
 			throw level_not_loaded();
 		}
 

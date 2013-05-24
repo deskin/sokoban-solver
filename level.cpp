@@ -22,6 +22,7 @@ level::parse(const std::string &s)
 			++rock_count;
 		} else if (c == '^') {
 			++pit_count;
+			pit_locations.insert(std::make_pair(row, column));
 		}
 
 		if (c == '\n') {

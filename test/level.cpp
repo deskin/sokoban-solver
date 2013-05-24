@@ -125,4 +125,23 @@ BOOST_AUTO_TEST_CASE(parse_combo_avatar) {
 	BOOST_CHECK_EQUAL(pos.second, 0);
 }
 
+BOOST_AUTO_TEST_CASE(parse_combo_pit_rock) {
+	sokoban::level level;
+	std::string s("^.6.`.\n"
+		      "   ..@");
+	BOOST_REQUIRE_NO_THROW(level.parse(s));
+	const std::set<sokoban::level::position_type> &pits(level.pits());
+	BOOST_CHECK(
+		pits.cend() != std::find(
+			pits.cbegin(),
+			pits.cend(),
+			std::make_pair<size_t, size_t>(2, 0)));
+	const std::set<sokoban::level::position_type> &rocks(level.rocks());
+	BOOST_CHECK(
+		rocks.cend() != std::find(
+			rocks.cbegin(),
+			rocks.cend(),
+			std::make_pair<size_t, size_t>(2, 0)));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

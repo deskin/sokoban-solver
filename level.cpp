@@ -12,18 +12,17 @@ level::parse(const std::string &s)
 	size_t row = 0;
 
 	for (const char &c : s) {
-		if (c == '@') {
+		if (c == '@' || c == '7') {
 			++avatar_count;
 			avatar_position.first = column;
 			avatar_position.second = row;
-		} else if (c == '`') {
+		}
+
+		if (c == '`') {
 			rock_locations.insert(std::make_pair(column, row));
-		} else if (c == '^') {
-			pit_locations.insert(std::make_pair(column, row));
-		} else if (c == '7') {
-			++avatar_count;
-			avatar_position.first = column;
-			avatar_position.second = row;
+		}
+
+		if (c == '^' || c == '7') {
 			pit_locations.insert(std::make_pair(column, row));
 		}
 

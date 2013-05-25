@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE(get_pits) {
 	sokoban::level level;
 	std::string s("@`^");
 	BOOST_REQUIRE_NO_THROW(level.parse(s));
-	const std::set<sokoban::level::position_type> &pits(level.pits());
+	const sokoban::level::positions_type &pits(level.pits());
 	BOOST_CHECK(
 		pits.cend() != std::find(
 			pits.cbegin(),
@@ -95,7 +95,7 @@ BOOST_AUTO_TEST_CASE(get_rocks) {
 		      " ..\n"
 		      "^`.");
 	BOOST_REQUIRE_NO_THROW(level.parse(s));
-	const std::set<sokoban::level::position_type> &rocks(level.rocks());
+	const sokoban::level::positions_type &rocks(level.rocks());
 	BOOST_CHECK(
 		rocks.cend() != std::find(
 			rocks.cbegin(),
@@ -114,7 +114,7 @@ BOOST_AUTO_TEST_CASE(parse_combo_avatar) {
 	std::string s("7`.\n"
 		      "...");
 	BOOST_REQUIRE_NO_THROW(level.parse(s));
-	const std::set<sokoban::level::position_type> &pits(level.pits());
+	const sokoban::level::positions_type &pits(level.pits());
 	BOOST_CHECK(
 		pits.cend() != std::find(
 			pits.cbegin(),
@@ -130,13 +130,13 @@ BOOST_AUTO_TEST_CASE(parse_combo_pit_rock) {
 	std::string s("^.6.`.\n"
 		      "   ..@");
 	BOOST_REQUIRE_NO_THROW(level.parse(s));
-	const std::set<sokoban::level::position_type> &pits(level.pits());
+	const sokoban::level::positions_type &pits(level.pits());
 	BOOST_CHECK(
 		pits.cend() != std::find(
 			pits.cbegin(),
 			pits.cend(),
 			std::make_pair<size_t, size_t>(2, 0)));
-	const std::set<sokoban::level::position_type> &rocks(level.rocks());
+	const sokoban::level::positions_type &rocks(level.rocks());
 	BOOST_CHECK(
 		rocks.cend() != std::find(
 			rocks.cbegin(),

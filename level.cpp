@@ -18,11 +18,11 @@ level::parse(const std::string &s)
 			avatar_position.second = row;
 		}
 
-		if (c == '`') {
+		if (c == '`' || c == '6') {
 			rock_locations.insert(std::make_pair(column, row));
 		}
 
-		if (c == '^' || c == '7') {
+		if (c == '^' || c == '6' || c == '7') {
 			pit_locations.insert(std::make_pair(column, row));
 		}
 

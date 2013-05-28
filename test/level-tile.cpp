@@ -27,12 +27,16 @@ BOOST_AUTO_TEST_CASE(invalid_pit_get_set) {
 	BOOST_CHECK_THROW(t.unset_pit(), sokoban::tile_invalid_exception);
 }
 
-#if 0
-BOOST_AUTO_TEST_CASE(pit_getter_setter) {
+BOOST_AUTO_TEST_CASE(pit_get_set) {
 	sokoban::level::positions_type s;
 	s.insert(std::make_pair<size_t, size_t>(1, 0));
 	sokoban::tile t{sokoban::tile::kind::valid};
-#endif
-
+	BOOST_CHECK_NO_THROW(t.set_pit(s.begin()));
+	sokoban::level::positions_type::iterator p;
+	BOOST_CHECK_NO_THROW(p = t.pit());
+	BOOST_CHECK(p == s.begin());
+	BOOST_CHECK_NO_THROW(t.unset_pit());
+	BOOST_CHECK(p != s.begin());
+}
 
 BOOST_AUTO_TEST_SUITE_END()

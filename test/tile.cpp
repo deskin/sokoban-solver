@@ -3,7 +3,12 @@
 
 #include "errors.h"
 #include "level.h"
-#include "tile.h"
+
+namespace sokoban {
+
+typedef level::tile tile;
+
+} // namespace sokoban
 
 BOOST_AUTO_TEST_SUITE(tile)
 

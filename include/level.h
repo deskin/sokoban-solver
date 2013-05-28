@@ -5,6 +5,8 @@
 #include <string>
 #include <utility>
 
+#include "errors.h"
+
 namespace sokoban {
 
 class level {
@@ -26,6 +28,27 @@ public:
 	const positions_type &rocks() const;
 
 	void parse(const std::string &s);
+
+class tile {
+public:
+	enum class kind {
+		invalid,
+		valid
+	};
+
+	explicit tile(kind) {}
+
+	positions_type::iterator pit() const
+	{
+		throw tile_invalid_exception();
+	}
+
+	positions_type::iterator
+	set_pit(level::positions_type::iterator i)
+	{
+		throw tile_invalid_exception();
+	}
+};
 
 private:
 	bool is_parsed;

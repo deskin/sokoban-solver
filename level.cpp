@@ -1,4 +1,7 @@
+#include <set>
 #include <string>
+#include <utility>
+
 #include "errors.h"
 #include "level.h"
 
@@ -47,6 +50,12 @@ level::parse(const std::string &s)
 	}
 
 	is_parsed = true;
+}
+
+void
+level::throw_level_not_loaded()
+{
+	throw level_not_loaded();
 }
 
 } // namespace sokoban

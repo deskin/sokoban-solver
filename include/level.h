@@ -5,8 +5,6 @@
 #include <string>
 #include <utility>
 
-#include "errors.h"
-
 namespace sokoban {
 
 class level {
@@ -48,13 +46,13 @@ private:
 	const T &require_parsed_or_throw(const T &val) const
 	{
 		if (!is_parsed) {
-			throw level_not_loaded();
+			throw_level_not_loaded();
 		}
 
 		return val;
 	}
 
-
+	static void throw_level_not_loaded();
 };
 
 } // namespace sokoban

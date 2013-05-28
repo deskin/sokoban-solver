@@ -5,7 +5,39 @@
 #include "errors.h"
 #include "level.h"
 
+namespace {
+
+template <typename T>
+const T &require_parsed_or_throw(const T &val, bool is_parsed)
+{
+	if (!is_parsed) {
+		throw sokoban::level_not_loaded();
+	}
+
+	return val;
+}
+
+} // namespace (anonymous)
+
 namespace sokoban {
+
+const level::position_type &
+level::avatar() const
+{
+	return require_parsed_or_throw(avatar_position, is_parsed);
+}
+
+const level::positions_type &
+level::pits() const
+{
+	return require_parsed_or_throw(pit_locations, is_parsed);
+}
+
+const level::positions_type &
+level::rocks() const
+{
+	return require_parsed_or_throw(rock_locations, is_parsed);
+}
 
 void
 level::parse(const std::string &s)
@@ -50,12 +82,6 @@ level::parse(const std::string &s)
 	}
 
 	is_parsed = true;
-}
-
-void
-level::throw_level_not_loaded()
-{
-	throw level_not_loaded();
 }
 
 } // namespace sokoban

@@ -24,6 +24,7 @@ BOOST_AUTO_TEST_CASE(invalid_pit_getter_setter) {
 		t.set_pit(
 			sokoban::level::positions_type::iterator()),
 		sokoban::tile_invalid_exception);
+	BOOST_CHECK_THROW(t.unset_pit(), sokoban::tile_invalid_exception);
 }
 
 #if 0

@@ -5,6 +5,8 @@
 #include <string>
 #include <utility>
 
+#include "errors.h"
+
 namespace sokoban {
 
 class level {

@@ -39,6 +39,8 @@ public:
 	positions_type::iterator pit() const;
 
 	positions_type::iterator set_pit(positions_type::iterator i);
+
+	void unset_pit();
 };
 
 private:

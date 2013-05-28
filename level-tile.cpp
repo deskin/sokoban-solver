@@ -15,4 +15,10 @@ level::tile::set_pit(level::positions_type::iterator i)
 	throw tile_invalid_exception();
 }
 
+void
+level::tile::unset_pit()
+{
+	throw tile_invalid_exception();
+}
+
 } // namespace sokoban

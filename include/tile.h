@@ -3,7 +3,15 @@
 
 namespace sokoban {
 
-class tile {};
+class tile {
+public:
+	enum class kind {
+		invalid,
+		valid
+	};
+
+	explicit tile(kind) {}
+};
 
 } // namespace sokoban
 

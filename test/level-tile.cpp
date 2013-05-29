@@ -1,6 +1,8 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include "tuple-hack.h"
+
 #include "errors.h"
 #include "level.h"
 
@@ -29,14 +31,18 @@ BOOST_AUTO_TEST_CASE(invalid_pit_get_set) {
 
 BOOST_AUTO_TEST_CASE(pit_get_set) {
 	sokoban::level::positions_type s;
-	s.insert(std::make_pair<size_t, size_t>(1, 0));
+	sokoban::level::positions_type::iterator i;
 	sokoban::tile t{sokoban::tile::kind::valid};
+	bool pit_valid;
+
+	s.insert(std::make_pair<size_t, size_t>(1, 0));
 	BOOST_CHECK_NO_THROW(t.set_pit(s.begin()));
-	sokoban::level::positions_type::iterator p;
-	BOOST_CHECK_NO_THROW(p = t.pit());
-	BOOST_CHECK(p == s.begin());
+	BOOST_CHECK_NO_THROW(std::tie(pit_valid, i) = t.pit());
+	BOOST_CHECK(pit_valid);
+	BOOST_CHECK(i == s.begin());
 	BOOST_CHECK_NO_THROW(t.unset_pit());
-	BOOST_CHECK(p != s.begin());
+	BOOST_CHECK_NO_THROW(std::tie(pit_valid, std::ignore) = t.pit());
+	BOOST_CHECK(!pit_valid);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -3,6 +3,7 @@
 
 #include <set>
 #include <string>
+#include "tuple-hack.h"
 #include <utility>
 
 namespace sokoban {
@@ -34,13 +35,22 @@ public:
 		valid
 	};
 
-	explicit tile(kind) {}
+	explicit tile(kind k) :
+		valid(kind::valid == k),
+		pit_valid(false),
+		pit_pointer()
+	{}
 
-	positions_type::iterator pit() const;
+	std::tuple<bool, positions_type::iterator> pit() const;
 
 	positions_type::iterator set_pit(positions_type::iterator i);
 
 	void unset_pit();
+
+private:
+	bool valid;
+	bool pit_valid;
+	positions_type::iterator pit_pointer;
 };
 
 private:

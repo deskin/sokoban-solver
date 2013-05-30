@@ -48,4 +48,35 @@ level::tile::unset_pit()
 	pit_valid = false;
 }
 
+std::tuple<bool, level::tile::pointer_type>
+level::tile::rock() const
+{
+	throw_if_invalid(valid);
+
+	return std::make_tuple<bool,
+			       pointer_type>(
+		!!rock_valid,
+		pointer_type(rock_pointer));
+}
+
+level::tile::pointer_type
+level::tile::set_rock(level::tile::pointer_type i)
+{
+	throw_if_invalid(valid);
+
+	using std::swap;
+	swap(rock_pointer, i);
+	rock_valid = true;
+
+	return rock_pointer;
+}
+
+void
+level::tile::unset_rock()
+{
+	throw_if_invalid(valid);
+
+	rock_valid = false;
+}
+
 } // namespace sokoban

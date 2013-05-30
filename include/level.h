@@ -40,7 +40,9 @@ public:
 	explicit tile(kind k) :
 		valid(kind::valid == k),
 		pit_valid(false),
-		pit_pointer()
+		rock_valid(false),
+		pit_pointer(),
+		rock_pointer()
 	{}
 
 	std::tuple<bool, pointer_type> pit() const;
@@ -49,10 +51,18 @@ public:
 
 	void unset_pit();
 
+	std::tuple<bool, pointer_type> rock() const;
+
+	pointer_type set_rock(pointer_type i);
+
+	void unset_rock();
+
 private:
 	bool valid;
 	bool pit_valid;
+	bool rock_valid;
 	pointer_type pit_pointer;
+	pointer_type rock_pointer;
 };
 
 private:

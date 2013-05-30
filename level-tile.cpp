@@ -17,19 +17,19 @@ void throw_if_invalid(bool valid)
 
 namespace sokoban {
 
-std::tuple<bool, level::positions_type::iterator>
+std::tuple<bool, level::tile::pointer_type>
 level::tile::pit() const
 {
 	throw_if_invalid(valid);
 
 	return std::make_tuple<bool,
-			       positions_type::iterator>(
+			       pointer_type>(
 		!!pit_valid,
-		positions_type::iterator(pit_pointer));
+		pointer_type(pit_pointer));
 }
 
-level::positions_type::iterator
-level::tile::set_pit(level::positions_type::iterator i)
+level::tile::pointer_type
+level::tile::set_pit(level::tile::pointer_type i)
 {
 	throw_if_invalid(valid);
 

@@ -30,6 +30,8 @@ public:
 
 class tile {
 public:
+	typedef positions_type::iterator pointer_type;
+
 	enum class kind {
 		invalid,
 		valid
@@ -41,16 +43,16 @@ public:
 		pit_pointer()
 	{}
 
-	std::tuple<bool, positions_type::iterator> pit() const;
+	std::tuple<bool, pointer_type> pit() const;
 
-	positions_type::iterator set_pit(positions_type::iterator i);
+	pointer_type set_pit(pointer_type i);
 
 	void unset_pit();
 
 private:
 	bool valid;
 	bool pit_valid;
-	positions_type::iterator pit_pointer;
+	pointer_type pit_pointer;
 };
 
 private:

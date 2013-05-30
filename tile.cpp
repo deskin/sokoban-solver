@@ -13,70 +13,75 @@ void throw_if_invalid(bool valid)
 	}
 }
 
-} // namespace
-
-namespace sokoban {
-
-std::tuple<bool, level::tile::pointer_type>
-level::tile::pit() const
+const sokoban::level::tile::pointer_tuple &
+get_pointer_tuple(const sokoban::level::tile::pointer_tuple &p, bool valid)
 {
 	throw_if_invalid(valid);
 
-	return std::make_tuple<bool,
-			       pointer_type>(
-		!!pit_valid,
-		pointer_type(pit_pointer));
+	return p;
 }
 
-level::tile::pointer_type
-level::tile::set_pit(level::tile::pointer_type i)
+void
+set_pointer_tuple(
+	sokoban::level::tile::pointer_tuple &p,
+	sokoban::level::tile::pointer_type &&i,
+	bool valid)
 {
 	throw_if_invalid(valid);
 
 	using std::swap;
-	swap(pit_pointer, i);
-	pit_valid = true;
+	swap(std::get<1>(p), i);
+	std::get<0>(p) = true;
+}
 
-	return pit_pointer;
+void
+unset_pointer_tuple(
+	sokoban::level::tile::pointer_tuple &p,
+	bool valid)
+{
+	throw_if_invalid(valid);
+
+	std::get<0>(p) = false;
+}
+
+} // namespace
+
+namespace sokoban {
+
+const level::tile::pointer_tuple &
+level::tile::pit() const
+{
+	return get_pointer_tuple(pit_pointer, valid);
+}
+
+void
+level::tile::set_pit(level::tile::pointer_type i)
+{
+	set_pointer_tuple(pit_pointer, std::move(i), valid);
 }
 
 void
 level::tile::unset_pit()
 {
-	throw_if_invalid(valid);
-
-	pit_valid = false;
+	unset_pointer_tuple(pit_pointer, valid);
 }
 
-std::tuple<bool, level::tile::pointer_type>
+const level::tile::pointer_tuple &
 level::tile::rock() const
 {
-	throw_if_invalid(valid);
-
-	return std::make_tuple<bool,
-			       pointer_type>(
-		!!rock_valid,
-		pointer_type(rock_pointer));
+	return get_pointer_tuple(rock_pointer, valid);
 }
 
-level::tile::pointer_type
+void
 level::tile::set_rock(level::tile::pointer_type i)
 {
-	throw_if_invalid(valid);
-
-	using std::swap;
-	swap(rock_pointer, i);
-	rock_valid = true;
-
-	return rock_pointer;
+	set_pointer_tuple(rock_pointer, std::move(i), valid);
 }
 
 void
 level::tile::unset_rock()
 {
-	throw_if_invalid(valid);
-
-	rock_valid = false;
+	unset_pointer_tuple(rock_pointer, valid);
 }
 
 } // namespace sokoban

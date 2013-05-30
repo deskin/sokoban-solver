@@ -31,6 +31,7 @@ public:
 class tile {
 public:
 	typedef positions_type::iterator pointer_type;
+	typedef std::tuple<bool, pointer_type> pointer_tuple;
 
 	enum class kind {
 		invalid,
@@ -39,30 +40,26 @@ public:
 
 	explicit tile(kind k) :
 		valid(kind::valid == k),
-		pit_valid(false),
-		rock_valid(false),
-		pit_pointer(),
-		rock_pointer()
+		pit_pointer(false, pointer_type()),
+		rock_pointer(false, pointer_type())
 	{}
 
-	std::tuple<bool, pointer_type> pit() const;
+	const pointer_tuple &pit() const;
 
-	pointer_type set_pit(pointer_type i);
+	void set_pit(pointer_type i);
 
 	void unset_pit();
 
-	std::tuple<bool, pointer_type> rock() const;
+	const pointer_tuple &rock() const;
 
-	pointer_type set_rock(pointer_type i);
+	void set_rock(pointer_type i);
 
 	void unset_rock();
 
 private:
 	bool valid;
-	bool pit_valid;
-	bool rock_valid;
-	pointer_type pit_pointer;
-	pointer_type rock_pointer;
+	pointer_tuple pit_pointer;
+	pointer_tuple rock_pointer;
 };
 
 private:

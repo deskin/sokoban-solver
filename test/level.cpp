@@ -6,7 +6,9 @@
 #include <algorithm>
 #include <set>
 #include <string>
+#include "tuple-hack.h"
 #include <utility>
+#include <vector>
 
 #include "errors.h"
 #include "level.h"
@@ -142,6 +144,21 @@ BOOST_AUTO_TEST_CASE(parse_combo_pit_rock) {
 			rocks.cbegin(),
 			rocks.cend(),
 			std::make_pair<size_t, size_t>(2, 0)));
+}
+
+BOOST_AUTO_TEST_CASE(parse_get_tiles) {
+	sokoban::level level;
+	std::string s("^.6.`.\n"
+		      "   ..@");
+	BOOST_REQUIRE_NO_THROW(level.parse(s));
+	const sokoban::level::tiles_type &tiles(level.tiles());
+	bool pit_valid;
+	BOOST_CHECK_NO_THROW(
+		std::tie(
+			pit_valid,
+			std::ignore) = tiles[0][3].pit());
+	BOOST_CHECK(!pit_valid);
+	BOOST_CHECK_THROW(tiles[1][0].rock(), sokoban::tile_invalid_exception);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

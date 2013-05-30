@@ -45,4 +45,29 @@ BOOST_AUTO_TEST_CASE(pit_get_set) {
 	BOOST_CHECK(!pit_valid);
 }
 
+BOOST_AUTO_TEST_CASE(invalid_rock_get_set) {
+	sokoban::tile t{sokoban::tile::kind::invalid};
+	BOOST_CHECK_THROW(t.rock(), sokoban::tile_invalid_exception);
+	BOOST_CHECK_THROW(
+		t.set_rock(
+			sokoban::level::tile::pointer_type()),
+		sokoban::tile_invalid_exception);
+	BOOST_CHECK_THROW(t.unset_rock(), sokoban::tile_invalid_exception);
+}
+
+BOOST_AUTO_TEST_CASE(rock_get_set) {
+	sokoban::level::positions_type s;
+	sokoban::level::tile::pointer_type i;
+	sokoban::tile t{sokoban::tile::kind::valid};
+	bool rock_valid;
+
+	s.insert(std::make_pair<size_t, size_t>(1, 0));
+	BOOST_CHECK_NO_THROW(t.set_rock(s.begin()));
+	BOOST_CHECK_NO_THROW(std::tie(rock_valid, i) = t.rock());
+	BOOST_CHECK(rock_valid);
+	BOOST_CHECK(i == s.begin());
+	BOOST_CHECK_NO_THROW(t.unset_rock());
+	BOOST_CHECK_NO_THROW(std::tie(rock_valid, std::ignore) = t.rock());
+	BOOST_CHECK(!rock_valid);
+}
 BOOST_AUTO_TEST_SUITE_END()

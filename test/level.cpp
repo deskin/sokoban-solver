@@ -161,4 +161,13 @@ BOOST_AUTO_TEST_CASE(parse_get_tiles) {
 	BOOST_CHECK_THROW(tiles[1][0].rock(), sokoban::tile_invalid_exception);
 }
 
+BOOST_AUTO_TEST_CASE(tiles_end_not_empty) {
+	sokoban::level level;
+	std::string s("^.6.`.\n"
+		      "   ..@\n");
+	BOOST_REQUIRE_NO_THROW(level.parse(s));
+	const sokoban::level::tiles_type &tiles(level.tiles());
+	BOOST_CHECK_NE(tiles.rbegin()->size(), 0);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

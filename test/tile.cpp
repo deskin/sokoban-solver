@@ -19,6 +19,12 @@ BOOST_AUTO_TEST_CASE(construct) {
 	BOOST_CHECK_NO_THROW(sokoban::tile{sokoban::tile::kind::valid});
 }
 
+BOOST_AUTO_TEST_CASE(is_valid) {
+	BOOST_CHECK(!sokoban::tile{sokoban::tile::kind::invalid}.is_valid());
+	BOOST_CHECK(sokoban::tile{sokoban::tile::kind::valid}.is_valid());
+
+}
+
 BOOST_AUTO_TEST_CASE(invalid_pit_get_set) {
 	sokoban::tile t{sokoban::tile::kind::invalid};
 	BOOST_CHECK_THROW(t.pit(), sokoban::tile_invalid_exception);

@@ -50,6 +50,8 @@ public:
 		rock_pointer(false, pointer_type())
 	{}
 
+	bool is_valid() const { return valid; }
+
 	const pointer_tuple &pit() const;
 
 	void set_pit(pointer_type i);

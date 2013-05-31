@@ -5,19 +5,23 @@
 #include <string>
 #include "tuple-hack.h"
 #include <utility>
+#include <vector>
 
 namespace sokoban {
 
 class level {
 public:
+	class tile;
 	typedef std::pair<size_t, size_t> position_type;
 	typedef std::set<position_type> positions_type;
+	typedef std::vector<std::vector<tile>> tiles_type;
 
 	level() :
 		is_parsed(false),
 		avatar_position(0, 0),
 		pit_locations(),
-		rock_locations()
+		rock_locations(),
+		tile_array()
 	{}
 
 	const position_type &avatar() const;
@@ -25,6 +29,8 @@ public:
 	const positions_type &pits() const;
 
 	const positions_type &rocks() const;
+
+	const tiles_type &tiles() const;
 
 	void parse(const std::string &s);
 
@@ -67,6 +73,7 @@ private:
 	position_type avatar_position;
 	positions_type pit_locations;
 	positions_type rock_locations;
+	tiles_type tile_array;
 };
 
 } // namespace sokoban

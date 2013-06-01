@@ -211,4 +211,14 @@ BOOST_AUTO_TEST_CASE(parse_invalid_chars_throw) {
 	BOOST_CHECK_THROW(level.parse(s), sokoban::level_parse_exception);
 }
 
+BOOST_AUTO_TEST_CASE(parse_get_tile_avatar) {
+	sokoban::level level;
+	std::string s(
+		"^.6.`.\n"
+		"   ..@\n");
+	BOOST_REQUIRE_NO_THROW(level.parse(s));
+	const sokoban::level::tiles_type &tiles(level.tiles());
+	BOOST_CHECK(tiles[1][5].avatar());
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -180,4 +180,21 @@ BOOST_AUTO_TEST_CASE(parse_tiles_not_empty) {
 	BOOST_CHECK_THROW(level.parse(s), sokoban::level_parse_exception);
 }
 
+BOOST_AUTO_TEST_CASE(equality) {
+	sokoban::level level;
+	sokoban::level level2;
+	sokoban::level level3;
+	std::string s(
+		"^.6.`.\n"
+		"   ..@");
+	std::string s2(
+		"^.6.`.\n"
+		"   .@.");
+	BOOST_REQUIRE_NO_THROW(level.parse(s));
+	BOOST_REQUIRE_NO_THROW(level2.parse(s));
+	BOOST_REQUIRE_NO_THROW(level3.parse(s2));
+	BOOST_CHECK(level == level2);
+	BOOST_CHECK(level != level3);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

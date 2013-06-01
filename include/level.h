@@ -50,11 +50,18 @@ public:
 
 	explicit tile(kind k) :
 		valid(kind::valid == k),
+		has_avatar(false),
 		pit_pointer(false, pointer_type()),
 		rock_pointer(false, pointer_type())
 	{}
 
 	bool is_valid() const { return valid; }
+
+	bool avatar() const;
+
+	void set_avatar();
+
+	void unset_avatar();
 
 	const pointer_tuple &pit() const;
 
@@ -70,6 +77,7 @@ public:
 
 private:
 	bool valid;
+	bool has_avatar;
 	pointer_tuple pit_pointer;
 	pointer_tuple rock_pointer;
 };

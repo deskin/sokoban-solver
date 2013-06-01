@@ -49,6 +49,30 @@ unset_pointer_tuple(
 
 namespace sokoban {
 
+bool
+level::tile::avatar() const
+{
+	throw_if_invalid(valid);
+
+	return has_avatar;
+}
+
+void
+level::tile::set_avatar()
+{
+	throw_if_invalid(valid);
+
+	has_avatar = true;
+}
+
+void
+level::tile::unset_avatar()
+{
+	throw_if_invalid(valid);
+
+	has_avatar = false;
+}
+
 const level::tile::pointer_tuple &
 level::tile::pit() const
 {

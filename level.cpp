@@ -57,7 +57,6 @@ level::parse(const std::string &s)
 	tile_array.emplace_back();
 
 	for (const char &c : s) {
-
 		if (c == '\n') {
 			if (tile_array[row].size() == 0) {
 				throw level_parse_exception();
@@ -67,17 +66,22 @@ level::parse(const std::string &s)
 			column = 0;
 			tile_array.emplace_back();
 		} else {
+			bool valid_symbol = (c == ' ');
+
 			tile_array[row].emplace_back(
-				c == ' ' ?
+				valid_symbol ?
 					tile::kind::invalid :
 					tile::kind::valid);
+
 			if (c == '@' || c == '7') {
+				valid_symbol = true;
 				++avatar_count;
 				avatar_position.first = column;
 				avatar_position.second = row;
 			}
 
 			if (c == '`' || c == '6') {
+				valid_symbol = true;
 				tile_array[row][column].set_rock(
 					rock_locations.insert(
 						std::make_pair(
@@ -86,11 +90,16 @@ level::parse(const std::string &s)
 			}
 
 			if (c == '^' || c == '6' || c == '7') {
+				valid_symbol = true;
 				tile_array[row][column].set_pit(
 					pit_locations.insert(
 						std::make_pair(
 							column,
 							row)).first);
+			}
+
+			if (!valid_symbol && c != '.') {
+				throw level_parse_exception();
 			}
 
 			++column;

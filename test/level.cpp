@@ -170,4 +170,14 @@ BOOST_AUTO_TEST_CASE(tiles_end_not_empty) {
 	BOOST_CHECK_NE(tiles.rbegin()->size(), 0);
 }
 
+BOOST_AUTO_TEST_CASE(parse_tiles_not_empty) {
+	sokoban::level level;
+	std::string s(
+		"\n"
+		"^.6.`.\n"
+		"\n"
+		"   ..@\n");
+	BOOST_CHECK_THROW(level.parse(s), sokoban::level_parse_exception);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

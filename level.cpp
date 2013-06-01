@@ -120,7 +120,7 @@ bool
 level::operator==(const level &rhs) const
 {
 	return (avatar_position == rhs.avatar_position) &&
-		(pit_locations == rhs.pit_locations);
+		(rock_locations == rhs.rock_locations);
 }
 
 

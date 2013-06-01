@@ -76,4 +76,23 @@ BOOST_AUTO_TEST_CASE(rock_get_set) {
 	BOOST_CHECK_NO_THROW(std::tie(rock_valid, std::ignore) = t.rock());
 	BOOST_CHECK(!rock_valid);
 }
+
+BOOST_AUTO_TEST_CASE(invalid_avatar_get_set) {
+	sokoban::tile t{sokoban::tile::kind::invalid};
+	BOOST_CHECK_THROW(t.avatar(), sokoban::tile_invalid_exception);
+	BOOST_CHECK_THROW(
+		t.set_avatar(),
+		sokoban::tile_invalid_exception);
+	BOOST_CHECK_THROW(t.unset_avatar(), sokoban::tile_invalid_exception);
+}
+
+BOOST_AUTO_TEST_CASE(avatar_get_set) {
+	sokoban::tile t{sokoban::tile::kind::valid};
+
+	BOOST_CHECK_NO_THROW(t.set_avatar());
+	BOOST_CHECK(t.avatar());
+	BOOST_CHECK_NO_THROW(t.unset_avatar());
+	BOOST_CHECK(!t.avatar());
+}
+
 BOOST_AUTO_TEST_SUITE_END()

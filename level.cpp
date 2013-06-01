@@ -78,6 +78,7 @@ level::parse(const std::string &s)
 				++avatar_count;
 				avatar_position.first = column;
 				avatar_position.second = row;
+				tile_array[row][column].set_avatar();
 			}
 
 			if (c == '`' || c == '6') {

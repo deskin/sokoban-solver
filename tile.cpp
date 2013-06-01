@@ -6,7 +6,8 @@
 
 namespace {
 
-void throw_if_invalid(bool valid)
+void
+throw_if_invalid(bool valid)
 {
 	if (!valid) {
 		throw sokoban::tile_invalid_exception();

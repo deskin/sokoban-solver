@@ -9,7 +9,8 @@
 namespace {
 
 template <typename T>
-const T &require_parsed_or_throw(const T &val, bool is_parsed)
+const T &
+require_parsed_or_throw(const T &val, bool is_parsed)
 {
 	if (!is_parsed) {
 		throw sokoban::level_not_loaded();
@@ -18,7 +19,7 @@ const T &require_parsed_or_throw(const T &val, bool is_parsed)
 	return val;
 }
 
-} // namespace (anonymous)
+} // namespace
 
 namespace sokoban {
 

@@ -39,6 +39,11 @@ public:
 
 	bool operator!=(const level &rhs) const { return !(*this == rhs); }
 
+	template <template <typename> class Traits>
+	friend
+	std::basic_ostream<char, Traits<char> > &
+	operator<<(std::basic_ostream<char, Traits<char> > &os, const level &l);
+
 class tile {
 public:
 	typedef positions_type::iterator pointer_type;
@@ -117,7 +122,28 @@ private:
 	positions_type pit_locations;
 	positions_type rock_locations;
 	tiles_type tile_array;
+
+	template <template <typename> class Traits>
+	void
+	ostream_insert(std::basic_ostream<char, Traits<char> > &os) const
+	{
+		for (const auto &v: tile_array) {
+			for (const auto &t: v) {
+				os << t;
+			}
+
+			os << '\n';
+		}
+	}
 };
+
+template <template <typename> class Traits>
+std::basic_ostream<char, Traits<char> > &
+operator<<(std::basic_ostream<char, Traits<char> > &os, const level &l)
+{
+	l.ostream_insert(os);
+	return os;
+}
 
 template <template <typename> class Traits>
 std::basic_ostream<char, Traits<char> > &

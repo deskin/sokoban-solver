@@ -104,6 +104,10 @@ level::parse(const std::string &s)
 		throw level_parse_exception();
 	}
 
+	if (tile_array[row].size() == 0) {
+		tile_array.pop_back();
+	}
+
 	is_parsed = true;
 }
 

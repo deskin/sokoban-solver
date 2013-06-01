@@ -1,6 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+#include <sstream>
 #include "tuple-hack.h"
 
 #include "errors.h"
@@ -93,6 +94,71 @@ BOOST_AUTO_TEST_CASE(avatar_get_set) {
 	BOOST_CHECK(t.avatar());
 	BOOST_CHECK_NO_THROW(t.unset_avatar());
 	BOOST_CHECK(!t.avatar());
+}
+
+BOOST_AUTO_TEST_CASE(ostream_insertion) {
+	sokoban::tile t_space{sokoban::tile::kind::invalid};
+	sokoban::tile t_dot{sokoban::tile::kind::valid};
+	sokoban::tile t_at{sokoban::tile::kind::valid};
+	sokoban::tile t_hat{sokoban::tile::kind::valid};
+	sokoban::tile t_backtick{sokoban::tile::kind::valid};
+	sokoban::tile t_6{sokoban::tile::kind::valid};
+	sokoban::tile t_7{sokoban::tile::kind::valid};
+	sokoban::level::positions_type s;
+
+	t_at.set_avatar();
+
+	t_hat.set_pit(s.begin());
+
+	t_backtick.set_rock(s.begin());
+
+	t_6.set_pit(s.begin());
+	t_6.set_rock(s.begin());
+
+	t_7.set_pit(s.begin());
+	t_7.set_avatar();
+
+	{
+		std::ostringstream os;
+		os << t_space;
+		BOOST_CHECK_EQUAL(" ", os.str());
+	}
+
+	{
+		std::ostringstream os;
+		os << t_dot;
+		BOOST_CHECK_EQUAL(".", os.str());
+	}
+
+	{
+		std::ostringstream os;
+		os << t_at;
+		BOOST_CHECK_EQUAL("@", os.str());
+	}
+
+	{
+		std::ostringstream os;
+		os << t_hat;
+		BOOST_CHECK_EQUAL("^", os.str());
+	}
+
+	{
+		std::ostringstream os;
+		os << t_backtick;
+		BOOST_CHECK_EQUAL("`", os.str());
+	}
+
+	{
+		std::ostringstream os;
+		os << t_6;
+		BOOST_CHECK_EQUAL("6", os.str());
+	}
+
+	{
+		std::ostringstream os;
+		os << t_7;
+		BOOST_CHECK_EQUAL("7", os.str());
+	}
 }
 
 BOOST_AUTO_TEST_SUITE_END()

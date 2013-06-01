@@ -58,6 +58,10 @@ level::parse(const std::string &s)
 	for (const char &c : s) {
 
 		if (c == '\n') {
+			if (tile_array[row].size() == 0) {
+				throw level_parse_exception();
+			}
+
 			++row;
 			column = 0;
 			tile_array.emplace_back();

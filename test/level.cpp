@@ -203,4 +203,12 @@ BOOST_AUTO_TEST_CASE(equality) {
 	BOOST_CHECK(level != level4);
 }
 
+BOOST_AUTO_TEST_CASE(parse_invalid_chars_throw) {
+	sokoban::level level;
+	std::string s(
+		"^.6.`.\n"
+		"v  ..@\n");
+	BOOST_CHECK_THROW(level.parse(s), sokoban::level_parse_exception);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

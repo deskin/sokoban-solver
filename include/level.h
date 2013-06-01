@@ -1,6 +1,7 @@
 #ifndef SOKOBAN_LEVEL_H_
 #define SOKOBAN_LEVEL_H_
 
+#include <ostream>
 #include <set>
 #include <string>
 #include "tuple-hack.h"
@@ -75,11 +76,39 @@ public:
 
 	void unset_rock();
 
+	template <template <typename> class Traits>
+	friend
+	std::basic_ostream<char, Traits<char> > &
+	operator<<(std::basic_ostream<char, Traits<char> > &os, const tile &t);
+
 private:
 	bool valid;
 	bool has_avatar;
 	pointer_tuple pit_pointer;
 	pointer_tuple rock_pointer;
+
+	template <template <typename> class Traits>
+	void
+	ostream_insert(std::basic_ostream<char, Traits<char> > &os) const
+	{
+		if (!valid) {
+			os << ' ';
+		} else if (std::get<0>(pit_pointer)) {
+			if (has_avatar) {
+				os << '7';
+			} else if (std::get<0>(rock_pointer)) {
+				os << '6';
+			} else {
+				os << '^';
+			}
+		} else if (std::get<0>(rock_pointer)) {
+			os << '`';
+		} else if (has_avatar) {
+			os << '@';
+		} else {
+			os << '.';
+		}
+	}
 };
 
 private:
@@ -89,6 +118,14 @@ private:
 	positions_type rock_locations;
 	tiles_type tile_array;
 };
+
+template <template <typename> class Traits>
+std::basic_ostream<char, Traits<char> > &
+operator<<(std::basic_ostream<char, Traits<char> > &os, const level::tile &t)
+{
+	t.ostream_insert(os);
+	return os;
+}
 
 } // namespace sokoban
 

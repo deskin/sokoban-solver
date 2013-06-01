@@ -34,6 +34,10 @@ public:
 
 	void parse(const std::string &s);
 
+	bool operator==(const level &rhs) const;
+
+	bool operator!=(const level &rhs) const { return !(*this == rhs); }
+
 class tile {
 public:
 	typedef positions_type::iterator pointer_type;

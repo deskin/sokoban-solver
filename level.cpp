@@ -116,4 +116,12 @@ level::parse(const std::string &s)
 	is_parsed = true;
 }
 
+bool
+level::operator==(const level &rhs) const
+{
+	return (avatar_position == rhs.avatar_position) &&
+		(pit_locations == rhs.pit_locations);
+}
+
+
 } // namespace sokoban

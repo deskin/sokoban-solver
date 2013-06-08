@@ -57,7 +57,7 @@ BOOST_AUTO_TEST_CASE(cannot_move_boundary) {
 	BOOST_CHECK(!sokoban::can_move(level2, sokoban::direction::left()));
 }
 
-BOOST_AUTO_TEST_CASE(cannot_move_rock_blocked) {
+BOOST_AUTO_TEST_CASE(cannot_move_rock_blocked_wall) {
 	sokoban::level level;
 	sokoban::level level2;
 	std::string s(

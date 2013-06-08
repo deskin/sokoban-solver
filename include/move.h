@@ -23,7 +23,10 @@ typedef std::integral_constant<value, value::left> left;
 
 } // namespace direction
 
-bool can_move(const level &l, direction::value d);
+bool can_move(const level &l, direction::up);
+bool can_move(const level &l, direction::right);
+bool can_move(const level &l, direction::down);
+bool can_move(const level &l, direction::left);
 
 } // namespace sokoban
 

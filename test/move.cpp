@@ -57,4 +57,21 @@ BOOST_AUTO_TEST_CASE(cannot_move_boundary) {
 	BOOST_CHECK(!sokoban::can_move(level2, sokoban::direction::left()));
 }
 
+BOOST_AUTO_TEST_CASE(cannot_move_rock_blocked) {
+	sokoban::level level;
+	sokoban::level level2;
+	std::string s(
+		"^`.\n"
+		"`@.\n");
+	std::string s2(
+		".@`\n"
+		".`^\n");
+	BOOST_REQUIRE_NO_THROW(level.parse(s));
+	BOOST_REQUIRE_NO_THROW(level2.parse(s2));
+	BOOST_CHECK(!sokoban::can_move(level, sokoban::direction::up()));
+	BOOST_CHECK(!sokoban::can_move(level, sokoban::direction::left()));
+	BOOST_CHECK(!sokoban::can_move(level2, sokoban::direction::down()));
+	BOOST_CHECK(!sokoban::can_move(level2, sokoban::direction::right()));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

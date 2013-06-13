@@ -5,6 +5,8 @@
 
 namespace sokoban {
 
+class cannot_move_exception : public std::exception {};
+
 class level_parse_exception : public std::exception {};
 
 class level_not_loaded : public std::exception {};

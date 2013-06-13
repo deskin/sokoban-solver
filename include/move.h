@@ -48,6 +48,11 @@ SOKOBAN_CAN_MOVE_TEMPLATE_INSTANTIATION
 template
 bool can_move(const level &l, direction::left);
 
+level move(const level &l, direction::up);
+level move(const level &l, direction::right);
+level move(const level &l, direction::down);
+level move(const level &l, direction::left);
+
 } // namespace sokoban
 
 #undef SOKOBAN_CAN_MOVE_TEMPLATE_INSTANTIATION

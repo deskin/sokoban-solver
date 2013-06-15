@@ -1,4 +1,3 @@
-#define SOKOBAN_CAN_MOVE_DEFINED
 #include <utility>
 
 #include "errors.h"
@@ -139,6 +138,20 @@ can_move(
 }
 
 template <typename Direction>
+bool
+can_move_(const level &l, Direction)
+{
+	const level::position_type &avatar(l.avatar());
+
+	return can_move(
+		l.tiles(),
+		avatar.second,
+		avatar.first,
+		Direction(),
+		move_type::avatar());
+}
+
+template <typename Direction>
 level
 move_(const level &l, Direction)
 {
@@ -158,7 +171,11 @@ move_(const level &l, Direction)
 	level::positions_type rocks(l.rocks());
 	level::tiles_type tiles(l.tiles());
 
-	check_position(tiles, new_avatar.second, new_avatar.first, Direction());
+	check_position(
+		tiles,
+		new_avatar.second,
+		new_avatar.first,
+		Direction());
 	tiles[avatar.second][avatar.first].unset_avatar();
 	tiles[new_avatar.second][new_avatar.first].set_avatar();
 
@@ -172,19 +189,26 @@ move_(const level &l, Direction)
 
 } // namespace
 
-template <typename Direction>
-bool
-can_move(const level &l, Direction)
+bool can_move(const level &l, direction::up)
 {
-	const level::position_type &avatar(l.avatar());
-
-	return can_move(
-		l.tiles(),
-		avatar.second,
-		avatar.first,
-		Direction(),
-		move_type::avatar());
+	return can_move_(l, direction::up());
 }
+
+bool can_move(const level &l, direction::right)
+{
+	return can_move_(l, direction::right());
+}
+
+bool can_move(const level &l, direction::down)
+{
+	return can_move_(l, direction::down());
+}
+
+bool can_move(const level &l, direction::left)
+{
+	return can_move_(l, direction::left());
+}
+
 
 level
 move(const level &l, direction::up)

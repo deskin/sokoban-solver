@@ -5,12 +5,6 @@
 
 #include "level.h"
 
-#ifndef SOKOBAN_CAN_MOVE_DEFINED
-#define SOKOBAN_CAN_MOVE_TEMPLATE_INSTANTIATION extern
-#else
-#define SOKOBAN_CAN_MOVE_TEMPLATE_INSTANTIATION
-#endif
-
 namespace sokoban {
 
 namespace direction {
@@ -29,23 +23,9 @@ typedef std::integral_constant<value, value::left> left;
 
 } // namespace direction
 
-template <typename Direction>
-bool can_move(const level &l, Direction);
-
-SOKOBAN_CAN_MOVE_TEMPLATE_INSTANTIATION
-template
 bool can_move(const level &l, direction::up);
-
-SOKOBAN_CAN_MOVE_TEMPLATE_INSTANTIATION
-template
 bool can_move(const level &l, direction::right);
-
-SOKOBAN_CAN_MOVE_TEMPLATE_INSTANTIATION
-template
 bool can_move(const level &l, direction::down);
-
-SOKOBAN_CAN_MOVE_TEMPLATE_INSTANTIATION
-template
 bool can_move(const level &l, direction::left);
 
 level move(const level &l, direction::up);
@@ -54,7 +34,5 @@ level move(const level &l, direction::down);
 level move(const level &l, direction::left);
 
 } // namespace sokoban
-
-#undef SOKOBAN_CAN_MOVE_TEMPLATE_INSTANTIATION
 
 #endif // SOKOBAN_MOVE_H_

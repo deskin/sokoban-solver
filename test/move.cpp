@@ -110,6 +110,52 @@ BOOST_AUTO_TEST_CASE(cannot_move_rock_blocked_rock) {
 
 BOOST_AUTO_TEST_CASE(get_level) {
 	sokoban::level level;
+	sokoban::level level_up;
+	sokoban::level level_right;
+	sokoban::level level_down;
+	sokoban::level level_left;
+	std::string s(
+		" ^`.\n"
+		".@..\n"
+		" .  \n");
+	std::string s_up(
+		" 7`.\n"
+		"....\n"
+		" .  \n");
+	std::string s_right(
+		" ^`.\n"
+		"..@.\n"
+		" .  \n");
+	std::string s_down(
+		" ^`.\n"
+		"....\n"
+		" @  \n");
+	std::string s_left(
+		" ^`.\n"
+		"@...\n"
+		" .  \n");
+	BOOST_REQUIRE_NO_THROW(level.parse(s));
+	BOOST_REQUIRE_NO_THROW(level_up.parse(s_up));
+	BOOST_REQUIRE_NO_THROW(level_right.parse(s_right));
+	BOOST_REQUIRE_NO_THROW(level_down.parse(s_down));
+	BOOST_REQUIRE_NO_THROW(level_left.parse(s_left));
+	BOOST_CHECK_EQUAL(
+		level_up,
+		sokoban::move(level, sokoban::direction::up()));
+	BOOST_CHECK_EQUAL(
+		level_right,
+		sokoban::move(level, sokoban::direction::right()));
+	BOOST_CHECK_EQUAL(
+		level_down,
+		sokoban::move(level, sokoban::direction::down()));
+	BOOST_CHECK_EQUAL(
+		level_left,
+		sokoban::move(level, sokoban::direction::left()));
+}
+
+#if 0
+BOOST_AUTO_TEST_CASE(get_level) {
+	sokoban::level level;
 	sokoban::level level2;
 	std::string s(
 		"^`.\n"
@@ -123,5 +169,6 @@ BOOST_AUTO_TEST_CASE(get_level) {
 		level2,
 		sokoban::move(level, sokoban::direction::up()));
 }
+#endif
 
 BOOST_AUTO_TEST_SUITE_END()

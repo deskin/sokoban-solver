@@ -15,14 +15,14 @@ typedef std::false_type rock;
 
 } // namespace move_type
 
-template <typename Direction, typename MoveType>
+template <direction::value D, bool M>
 bool
 can_move(
 	const level::tiles_type &tiles,
 	size_t row,
 	size_t column,
-	Direction,
-	MoveType);
+	std::integral_constant<direction::value, D>,
+	std::integral_constant<bool, M>);
 
 bool
 check_position(
@@ -84,39 +84,42 @@ check_position(
 	return true;
 }
 
-template <typename Direction>
+template <direction::value D>
 bool
 check_rock(
 	const level::tiles_type &tiles,
 	size_t row,
 	size_t column,
-	Direction,
+	std::integral_constant<direction::value, D>,
 	move_type::avatar)
 {
+	typedef std::integral_constant<direction::value, D> Direction;
 	return can_move(tiles, row, column, Direction(), move_type::rock());
 }
 
-template <typename Direction>
+template <direction::value D>
 bool
 check_rock(
 	const level::tiles_type &,
 	size_t,
 	size_t,
-	Direction,
+	std::integral_constant<direction::value, D>,
 	move_type::rock)
 {
 	return false;
 }
 
-template <typename Direction, typename MoveType>
+template <direction::value D, bool M>
 bool
 can_move(
 	const level::tiles_type &tiles,
 	size_t row,
 	size_t column,
-	Direction,
-	MoveType)
+	std::integral_constant<direction::value, D>,
+	std::integral_constant<bool, M>)
 {
+	typedef std::integral_constant<direction::value, D> Direction;
+	typedef std::integral_constant<bool, M> MoveType;
 	if (!check_position(tiles, row, column, Direction())) {
 		return false;
 	}
@@ -137,10 +140,11 @@ can_move(
 	return true;
 }
 
-template <typename Direction>
+template <direction::value D>
 bool
-can_move_(const level &l, Direction)
+can_move_(const level &l, std::integral_constant<direction::value, D>)
 {
+	typedef std::integral_constant<direction::value, D> Direction;
 	const level::position_type &avatar(l.avatar());
 
 	return can_move(
@@ -151,10 +155,11 @@ can_move_(const level &l, Direction)
 		move_type::avatar());
 }
 
-template <typename Direction>
+template <direction::value D>
 level
-move_(const level &l, Direction)
+move_(const level &l, std::integral_constant<direction::value, D>)
 {
+	typedef std::integral_constant<direction::value, D> Direction;
 	level::position_type avatar(l.avatar());
 	level::position_type new_avatar(avatar);
 

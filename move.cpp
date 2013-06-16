@@ -1,3 +1,5 @@
+#include "tuple-hack.h"
+#include <type_traits>
 #include <utility>
 
 #include "errors.h"
@@ -181,8 +183,29 @@ move_(const level &l, std::integral_constant<direction::value, D>)
 		new_avatar.second,
 		new_avatar.first,
 		Direction());
+
+	level::tile &new_avatar_tile(
+		tiles[new_avatar.second][new_avatar.first]);
+
 	tiles[avatar.second][avatar.first].unset_avatar();
-	tiles[new_avatar.second][new_avatar.first].set_avatar();
+	new_avatar_tile.set_avatar();
+
+	level::tile::pointer_tuple rock(new_avatar_tile.rock());
+
+	if (std::get<0>(rock)) {
+		level::position_type new_rock(new_avatar);
+
+		check_position(
+			tiles,
+			new_rock.second,
+			new_rock.first,
+			Direction());
+
+		tiles[new_rock.second][new_rock.first].set_rock(
+			rocks.insert(std::get<1>(rock), new_rock));
+		rocks.erase(std::get<1>(rock));
+		new_avatar_tile.unset_rock();
+	}
 
 	return level(
 		new_avatar.second,

@@ -135,6 +135,19 @@ level::move_avatar(const level::position_type &new_position)
 	avatar_position = new_position;
 }
 
+void
+level::move_rock(
+	const level::position_type &old_position,
+	const level::position_type &new_position)
+{
+	const tile::pointer_tuple &rock(
+		tile_array[old_position.second][old_position.first].rock());
+	tile_array[new_position.second][new_position.first].set_rock(
+		rock_locations.insert(std::get<1>(rock), new_position));
+	rock_locations.erase(std::get<1>(rock));
+	tile_array[old_position.second][old_position.first].unset_rock();
+}
+
 bool
 level::operator==(const level &rhs) const
 {

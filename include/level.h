@@ -49,6 +49,10 @@ public:
 
 	void move_avatar(const position_type &new_position);
 
+	void move_rock(
+		const position_type &old_position,
+		const position_type &new_position);
+
 	void parse(const std::string &s);
 
 	bool operator==(const level &rhs) const;

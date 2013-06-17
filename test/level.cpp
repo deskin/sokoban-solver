@@ -233,4 +233,21 @@ BOOST_AUTO_TEST_CASE(ostream_insertion) {
 	BOOST_CHECK_EQUAL(s, os.str());
 }
 
+BOOST_AUTO_TEST_CASE(move_avatar) {
+	sokoban::level level;
+	std::string s(
+		"^.6.`.\n"
+		"   ..@\n");
+	BOOST_REQUIRE_NO_THROW(level.parse(s));
+	sokoban::level::position_type avatar_old(5, 1);
+	sokoban::level::position_type avatar_new(5, 0);
+	BOOST_CHECK_NO_THROW(level.move_avatar(avatar_new));
+	const sokoban::level::position_type &avatar(level.avatar());
+	const sokoban::level::tiles_type &tiles(level.tiles());
+	BOOST_CHECK_EQUAL(avatar_new.first, avatar.first);
+	BOOST_CHECK_EQUAL(avatar_new.second, avatar.second);
+	BOOST_CHECK(!tiles[avatar_old.second][avatar_old.first].avatar());
+	BOOST_CHECK(tiles[avatar_new.second][avatar_new.first].avatar());
+}
+
 BOOST_AUTO_TEST_SUITE_END()

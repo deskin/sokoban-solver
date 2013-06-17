@@ -25,6 +25,8 @@ public:
 		tile_array()
 	{}
 
+	level(const level &l);
+
 	level(
 		size_t avatar_row,
 		size_t avatar_column,

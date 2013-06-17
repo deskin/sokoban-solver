@@ -126,6 +126,15 @@ level::parse(const std::string &s)
 	is_parsed = true;
 }
 
+void
+level::move_avatar(const level::position_type &new_position)
+{
+	tile_array[avatar_position.second][avatar_position.first]
+		.unset_avatar();
+	tile_array[new_position.second][new_position.first].set_avatar();
+	avatar_position = new_position;
+}
+
 bool
 level::operator==(const level &rhs) const
 {

@@ -47,6 +47,8 @@ public:
 
 	const tiles_type &tiles() const;
 
+	void move_avatar(const position_type &new_position);
+
 	void parse(const std::string &s);
 
 	bool operator==(const level &rhs) const;

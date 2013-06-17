@@ -270,4 +270,30 @@ BOOST_AUTO_TEST_CASE(move_rock) {
 	BOOST_CHECK_EQUAL(rock_new.second, std::get<1>(rock)->second);
 }
 
+BOOST_AUTO_TEST_CASE(copy) {
+	sokoban::level level;
+	std::string s(
+		"^.6.`.\n"
+		"   ..@\n");
+	BOOST_REQUIRE_NO_THROW(level.parse(s));
+	sokoban::level level2(level);
+	const sokoban::level::positions_type &pits(level.pits());
+	const sokoban::level::positions_type &rocks(level.rocks());
+	const sokoban::level::tiles_type &tiles2(level2.tiles());
+
+	for (sokoban::level::tile::pointer_type i = pits.begin();
+		i != pits.end();
+		++i) {
+		BOOST_CHECK(std::get<1>(
+			tiles2[i->second][i->first].pit()) != i);
+	}
+
+	for (sokoban::level::tile::pointer_type i = rocks.begin();
+		i != rocks.end();
+		++i) {
+		BOOST_CHECK(std::get<1>(
+			tiles2[i->second][i->first].rock()) != i);
+	}
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -178,6 +178,18 @@ move_(const level &l, std::integral_constant<direction::value, D>)
 	level::positions_type rocks(l.rocks());
 	level::tiles_type tiles(l.tiles());
 
+	for (level::tile::pointer_type i = pits.begin();
+		i != pits.end();
+		++i) {
+		tiles[i->second][i->first].set_pit(i);
+	}
+
+	for (level::tile::pointer_type i = rocks.begin();
+		i != rocks.end();
+		++i) {
+		tiles[i->second][i->first].set_rock(i);
+	}
+
 	check_position(
 		tiles,
 		new_avatar.second,

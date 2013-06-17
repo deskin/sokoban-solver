@@ -194,23 +194,9 @@ BOOST_AUTO_TEST_CASE(get_level_rock) {
 	BOOST_REQUIRE_NO_THROW(level_right.parse(s_right));
 	BOOST_REQUIRE_NO_THROW(level_down.parse(s_down));
 	BOOST_REQUIRE_NO_THROW(level_left.parse(s_left));
-	sokoban::level l(sokoban::move(level, sokoban::direction::up()));
-	BOOST_CHECK_EQUAL(level_up.rocks().size(), l.rocks().size());
-	auto &r = l.rocks();
-	auto &r_up = level_up.rocks();
-	size_t x = 0;
-	for (auto i = r.cbegin(), i_up = r_up.cbegin();
-		i != r.cend() && i_up != r_up.cend();
-		++i, ++i_up) {
-		BOOST_CHECK_EQUAL(x * 100 + i_up->first * 10 + i_up->second,
-			x * 100 + i->first * 10 + i->second);
-		BOOST_CHECK_EQUAL(i_up->second, i->second);
-		++x;
-	}
-	BOOST_CHECK(
-		level_up.rocks() == l.rocks());
-	BOOST_CHECK(
-		level_up.avatar() == l.avatar());
+	BOOST_CHECK_EQUAL(
+		level_up,
+		sokoban::move(level, sokoban::direction::up()));
 	BOOST_CHECK_EQUAL(
 		level_right,
 		sokoban::move(level, sokoban::direction::right()));

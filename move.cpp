@@ -174,21 +174,10 @@ move_(const level &l, std::integral_constant<direction::value, D>)
 		throw cannot_move_exception();
 	}
 
-	level::positions_type pits(l.pits());
-	level::positions_type rocks(l.rocks());
-	level::tiles_type tiles(l.tiles());
-
-	for (level::tile::pointer_type i = pits.begin();
-		i != pits.end();
-		++i) {
-		tiles[i->second][i->first].set_pit(i);
-	}
-
-	for (level::tile::pointer_type i = rocks.begin();
-		i != rocks.end();
-		++i) {
-		tiles[i->second][i->first].set_rock(i);
-	}
+	level new_level(l);
+	level::positions_type pits(new_level.pits());
+	level::positions_type rocks(new_level.rocks());
+	level::tiles_type tiles(new_level.tiles());
 
 	check_position(
 		tiles,
@@ -198,9 +187,6 @@ move_(const level &l, std::integral_constant<direction::value, D>)
 
 	level::tile &new_avatar_tile(
 		tiles[new_avatar.second][new_avatar.first]);
-
-	tiles[avatar.second][avatar.first].unset_avatar();
-	new_avatar_tile.set_avatar();
 
 	level::tile::pointer_tuple rock(new_avatar_tile.rock());
 
@@ -213,18 +199,12 @@ move_(const level &l, std::integral_constant<direction::value, D>)
 			new_rock.first,
 			Direction());
 
-		tiles[new_rock.second][new_rock.first].set_rock(
-			rocks.insert(std::get<1>(rock), new_rock));
-		rocks.erase(std::get<1>(rock));
-		new_avatar_tile.unset_rock();
+		new_level.move_rock(new_avatar, new_rock);
 	}
 
-	return level(
-		new_avatar.second,
-		new_avatar.first,
-		std::move(pits),
-		std::move(rocks),
-		std::move(tiles));
+	new_level.move_avatar(new_avatar);
+
+	return new_level;
 }
 
 } // namespace

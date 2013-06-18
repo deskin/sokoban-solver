@@ -27,20 +27,6 @@ public:
 
 	level(const level &l);
 
-	level(
-		size_t avatar_row,
-		size_t avatar_column,
-		positions_type &&pits,
-		positions_type &&rocks,
-		tiles_type &&tiles)
-	:
-		is_parsed(true),
-		avatar_position(avatar_column, avatar_row),
-		pit_locations(std::move(pits)),
-		rock_locations(std::move(rocks)),
-		tile_array(std::move(tiles))
-	{}
-
 	const position_type &avatar() const;
 
 	const positions_type &pits() const;

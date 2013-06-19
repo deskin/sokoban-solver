@@ -4,6 +4,7 @@
 #include <string>
 
 #include "level.h"
+#include "level_mover.h"
 
 BOOST_AUTO_TEST_SUITE(level_mover)
 

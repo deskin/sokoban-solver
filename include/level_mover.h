@@ -4,14 +4,17 @@
 #include <vector>
 
 #include "level.h"
+#include "move.h"
 
 namespace sokoban {
 
 class level_mover {
-public:
-	level_mover(const level &l) {}
+	std::vector<level> levels;
 
-	size_t size() const { return 1; }
+public:
+	level_mover(const level &l);
+
+	size_t size() const { return levels.size(); }
 };
 
 } // namespace sokoban

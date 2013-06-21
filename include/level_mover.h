@@ -15,7 +15,7 @@ class level_mover {
 public:
 	typedef levels_container::const_iterator iterator;
 
-	level_mover(const level &l);
+	explicit level_mover(const level &l);
 
 	iterator begin() const { return levels.cbegin(); }
 

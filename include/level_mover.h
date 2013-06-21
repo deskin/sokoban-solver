@@ -9,10 +9,17 @@
 namespace sokoban {
 
 class level_mover {
-	std::vector<level> levels;
+	typedef std::vector<level> levels_container;
+	levels_container levels;
 
 public:
+	typedef levels_container::const_iterator iterator;
+
 	level_mover(const level &l);
+
+	iterator begin() const { return levels.cbegin(); }
+
+	iterator end() const { return levels.cend(); }
 
 	size_t size() const { return levels.size(); }
 };

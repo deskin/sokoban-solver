@@ -21,4 +21,17 @@ BOOST_AUTO_TEST_CASE(size) {
 	BOOST_CHECK_EQUAL(2, sokoban::level_mover(level2).size());
 }
 
+BOOST_AUTO_TEST_CASE(iterator) {
+	sokoban::level level;
+	sokoban::level level_left;
+	std::string s("^`@\n");
+	std::string s_left("6@.\n");
+	BOOST_REQUIRE_NO_THROW(level.parse(s));
+	BOOST_REQUIRE_NO_THROW(level_left.parse(s_left));
+	sokoban::level_mover mover(level);
+	sokoban::level_mover::iterator i(mover.begin());
+	BOOST_CHECK_EQUAL(level_left, *i);
+	BOOST_CHECK(++i == mover.end());
+}
+
 BOOST_AUTO_TEST_SUITE_END()

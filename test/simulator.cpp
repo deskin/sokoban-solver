@@ -2,7 +2,9 @@
 #include <boost/test/unit_test.hpp>
 
 #include <string>
+#include <vector>
 
+#include "analyze.h"
 #include "simulator.h"
 
 BOOST_AUTO_TEST_SUITE(simulator)
@@ -16,6 +18,14 @@ BOOST_AUTO_TEST_CASE(get_steps) {
 	std::string s("6@.\n");
 	sokoban::simulator sim(s);
 	BOOST_CHECK_NO_THROW(sim.steps());
+}
+
+BOOST_AUTO_TEST_CASE(run_basic) {
+	std::string s("6@.\n");
+	sokoban::simulator sim(s);
+	BOOST_REQUIRE_NO_THROW(sim.run());
+	BOOST_CHECK(sim.is_win());
+	BOOST_CHECK(sokoban::is_win(sim.steps().back()));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

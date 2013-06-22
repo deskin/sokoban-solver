@@ -1,13 +1,13 @@
 #ifndef SOKOBAN_SIMULATOR_H_
 #define SOKOBAN_SIMULATOR_H_
 
-#include "level.h"
+#include <string>
 
 namespace sokoban {
 
 class simulator {
 public:
-	simulator(const level &) {}
+	explicit simulator(const std::string &) {}
 };
 
 } // namespace sokoban

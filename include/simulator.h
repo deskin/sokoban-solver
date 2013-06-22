@@ -16,11 +16,13 @@ private:
 	steps_type level_steps;
 
 public:
-	explicit simulator(const std::string &) :
-		level_steps()
-	{}
+	explicit simulator(const std::string &s);
+
+	bool is_win() const { return true; }
 
 	const steps_type &steps() const { return level_steps; }
+
+	void run() {}
 };
 
 } // namespace sokoban

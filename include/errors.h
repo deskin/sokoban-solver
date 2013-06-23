@@ -11,6 +11,8 @@ class level_parse_exception : public std::exception {};
 
 class level_not_loaded : public std::exception {};
 
+class simulator_not_run : public std::exception {};
+
 class tile_invalid_exception : public std::exception {};
 
 } // namespace sokoban

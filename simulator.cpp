@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 
+#include "analyze.h"
 #include "errors.h"
 #include "level.h"
 #include "simulator.h"
@@ -15,13 +16,13 @@ simulator::simulator(const std::string &s) :
 }
 
 bool
-simulator::is_win() const
+simulator::win() const
 {
 	if (!has_run) {
 		throw simulator_not_run();
 	}
 
-	return true;
+	return is_win(level_steps.back());
 }
 
 void

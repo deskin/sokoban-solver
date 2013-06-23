@@ -19,7 +19,7 @@ private:
 public:
 	explicit simulator(const std::string &s);
 
-	bool is_win() const;
+	bool win() const;
 
 	const steps_type &steps() const { return level_steps; }
 

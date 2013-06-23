@@ -42,4 +42,13 @@ BOOST_AUTO_TEST_CASE(win_fails_impossible_level) {
 	BOOST_CHECK(!sim.win());
 }
 
+BOOST_AUTO_TEST_CASE(run_step_1) {
+	std::string s("^`@\n");
+	sokoban::simulator sim(s);
+	BOOST_REQUIRE_NO_THROW(sim.run());
+	BOOST_CHECK(sim.win());
+	const sokoban::simulator::steps_type &steps(sim.steps());
+	BOOST_CHECK_EQUAL(2, steps.size());
+}
+
 BOOST_AUTO_TEST_SUITE_END()

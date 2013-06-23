@@ -35,4 +35,11 @@ BOOST_AUTO_TEST_CASE(win_before_run_throws) {
 	BOOST_CHECK_THROW(sim.is_win(), sokoban::simulator_not_run);
 }
 
+BOOST_AUTO_TEST_CASE(win_fails_impossible_level) {
+	std::string s("^@`\n");
+	sokoban::simulator sim(s);
+	BOOST_REQUIRE_NO_THROW(sim.run());
+	BOOST_CHECK(!sim.is_win());
+}
+
 BOOST_AUTO_TEST_SUITE_END()

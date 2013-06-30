@@ -37,6 +37,20 @@ count_level_arrangements(const sokoban::level &l)
 	return tile_product / rock_product;
 }
 
+bool
+prune(const sokoban::simulator::steps_type &levels)
+{
+	const sokoban::level &level = levels.back();
+	for (size_t i = levels.size() - 1; i / 2 > 0;) {
+		i -= 2;
+		if (level == levels[i]) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 } // namespace detail
 
 namespace sokoban {
@@ -51,32 +65,42 @@ simulator::simulator(const std::string &s) :
 	level_steps[0].parse(s);
 }
 
-bool
+det::solve_status
 simulator::solve(size_t max_steps)
 {
 	++solve_call_count;
 
 	if (level_steps.size() > max_steps) {
-		return false;
+		return det::solve_status::too_deep;
+	}
+
+	if (det::prune(level_steps)) {
+		return det::solve_status::pruned;
 	}
 
 	const level &current = level_steps.back();
 
 	if (is_win(current)) {
-		return true;
+		return det::solve_status::win;
 	}
+
+	det::solve_status children_status = det::solve_status::pruned;
 
 	level_steps.push_back(level());
 	for (const auto &l: level_mover(level_steps[level_steps.size() - 2])) {
 		level_steps.back() = l;
-		if (solve(max_steps)) {
-			return true;
+		det::solve_status child_status = solve(max_steps);
+
+		if (child_status == det::solve_status::win) {
+			return det::solve_status::win;
+		} else if (child_status == det::solve_status::too_deep) {
+			children_status = child_status;
 		}
 	}
 
 	level_steps.pop_back();
 
-	return false;
+	return children_status;
 }
 
 bool
@@ -96,12 +120,13 @@ simulator::run()
 
 	size_t max_steps = det::count_level_arrangements(level_steps[0]);
 	size_t current_steps = 1;
-	bool solved;
+	det::solve_status solved;
 
 	do {
 		solved = solve(current_steps);
 		++current_steps;
-	} while (!solved && current_steps <= max_steps);
+	} while (solved == det::solve_status::too_deep &&
+		current_steps <= max_steps);
 }
 
 } // namespace sokoban

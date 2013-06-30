@@ -6,6 +6,16 @@
 
 #include "level.h"
 
+namespace detail {
+
+enum class solve_status {
+	too_deep,
+	pruned,
+	win
+};
+
+} // namespace detail
+
 namespace sokoban {
 
 class simulator {
@@ -17,7 +27,7 @@ private:
 	size_t solve_call_count;
 	bool has_run;
 
-	bool solve(size_t max_steps);
+	detail::solve_status solve(size_t max_steps);
 
 public:
 	explicit simulator(const std::string &s);

@@ -6,7 +6,10 @@
 
 #include "analyze.h"
 #include "errors.h"
+#include "level.h"
 #include "simulator.h"
+
+#include "simulator-test.h"
 
 BOOST_AUTO_TEST_SUITE(simulator)
 
@@ -49,6 +52,15 @@ BOOST_AUTO_TEST_CASE(run_step_1) {
 	BOOST_CHECK(sim.win());
 	const sokoban::simulator::steps_type &steps(sim.steps());
 	BOOST_CHECK_EQUAL(2, steps.size());
+}
+
+BOOST_AUTO_TEST_CASE(count_level_arrangements) {
+	sokoban::level l;
+	std::string s(
+		"^`.`.^\n"
+		"  @   \n");
+	BOOST_REQUIRE_NO_THROW(l.parse(s));
+	BOOST_CHECK_EQUAL(105, detail::count_level_arrangements(l));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

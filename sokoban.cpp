@@ -23,9 +23,10 @@ int main(int argc, char **argv) {
 		if (sim.win()) {
 			const sok::simulator::steps_type &steps(
 				sim.steps());
-			std::cout << "Solved in "
-				<< steps.size() - 1
-				<< " moves."
+			std::cout << "Solved in " << steps.size() - 1
+				<< " moves." << std::endl;
+
+			std::cout << sim.solve_calls() << " calls to solve()."
 				<< std::endl;
 
 			for (size_t i = 0; i < steps.size(); ++i) {

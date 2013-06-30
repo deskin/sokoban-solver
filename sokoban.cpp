@@ -27,6 +27,13 @@ int main(int argc, char **argv) {
 				<< steps.size() - 1
 				<< " moves."
 				<< std::endl;
+
+			for (size_t i = 0; i < steps.size(); ++i) {
+				std::cout << "Step " << i << ":" << std::endl;
+				std::cout << steps[i] << std::endl;
+			}
+		} else {
+			std::cout << "Could not solve level." << std::endl;
 		}
 	} catch (const sok::level_parse_exception &) {
 		std::cerr << "Level parsing error!" << std::endl;

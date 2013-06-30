@@ -37,32 +37,6 @@ count_level_arrangements(const sokoban::level &l)
 	return tile_product / rock_product;
 }
 
-bool
-solve(sokoban::simulator::steps_type &levels, size_t max_steps)
-{
-	if (levels.size() > max_steps) {
-		return false;
-	}
-
-	const sokoban::level &current = levels.back();
-
-	if (sokoban::is_win(current)) {
-		return true;
-	}
-
-	levels.push_back(sokoban::level());
-	for (const auto &l: sokoban::level_mover(levels[levels.size() - 2])) {
-		levels.back() = l;
-		if (solve(levels, max_steps)) {
-			return true;
-		}
-	}
-
-	levels.pop_back();
-
-	return false;
-}
-
 } // namespace detail
 
 namespace sokoban {
@@ -71,9 +45,38 @@ namespace det = ::detail;
 
 simulator::simulator(const std::string &s) :
 	level_steps(1),
+	solve_call_count(0),
 	has_run(false)
 {
 	level_steps[0].parse(s);
+}
+
+bool
+simulator::solve(size_t max_steps)
+{
+	++solve_call_count;
+
+	if (level_steps.size() > max_steps) {
+		return false;
+	}
+
+	const level &current = level_steps.back();
+
+	if (is_win(current)) {
+		return true;
+	}
+
+	level_steps.push_back(level());
+	for (const auto &l: level_mover(level_steps[level_steps.size() - 2])) {
+		level_steps.back() = l;
+		if (solve(max_steps)) {
+			return true;
+		}
+	}
+
+	level_steps.pop_back();
+
+	return false;
 }
 
 bool
@@ -96,7 +99,7 @@ simulator::run()
 	bool solved;
 
 	do {
-		solved = det::solve(level_steps, current_steps);
+		solved = solve(current_steps);
 		++current_steps;
 	} while (!solved && current_steps <= max_steps);
 }

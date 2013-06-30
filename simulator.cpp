@@ -40,7 +40,7 @@ count_level_arrangements(const sokoban::level &l)
 bool
 solve(sokoban::simulator::steps_type &levels, size_t max_steps)
 {
-	if (levels.size() >= max_steps) {
+	if (levels.size() > max_steps) {
 		return false;
 	}
 
@@ -92,7 +92,13 @@ simulator::run()
 	has_run = true;
 
 	size_t max_steps = det::count_level_arrangements(level_steps[0]);
-	det::solve(level_steps, max_steps);
+	size_t current_steps = 1;
+	bool solved;
+
+	do {
+		solved = det::solve(level_steps, current_steps);
+		++current_steps;
+	} while (!solved && current_steps <= max_steps);
 }
 
 } // namespace sokoban

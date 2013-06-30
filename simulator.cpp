@@ -4,6 +4,7 @@
 #include "analyze.h"
 #include "errors.h"
 #include "level.h"
+#include "level_mover.h"
 #include "simulator.h"
 
 namespace detail {
@@ -36,9 +37,37 @@ count_level_arrangements(const sokoban::level &l)
 	return tile_product / rock_product;
 }
 
+bool
+solve(sokoban::simulator::steps_type &levels, size_t max_steps)
+{
+	if (levels.size() >= max_steps) {
+		return false;
+	}
+
+	const sokoban::level &current = levels.back();
+
+	if (sokoban::is_win(current)) {
+		return true;
+	}
+
+	levels.push_back(sokoban::level());
+	for (const auto &l: sokoban::level_mover(levels[levels.size() - 2])) {
+		levels.back() = l;
+		if (solve(levels, max_steps)) {
+			return true;
+		}
+	}
+
+	levels.pop_back();
+
+	return false;
+}
+
 } // namespace detail
 
 namespace sokoban {
+
+namespace det = ::detail;
 
 simulator::simulator(const std::string &s) :
 	level_steps(1),
@@ -62,8 +91,8 @@ simulator::run()
 {
 	has_run = true;
 
-	size_t max_steps = detail::count_level_arrangements(level_steps[0]);
-	if (max_steps) {}
+	size_t max_steps = det::count_level_arrangements(level_steps[0]);
+	det::solve(level_steps, max_steps);
 }
 
 } // namespace sokoban

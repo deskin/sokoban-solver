@@ -63,4 +63,13 @@ BOOST_AUTO_TEST_CASE(count_level_arrangements) {
 	BOOST_CHECK_EQUAL(105, detail::count_level_arrangements(l));
 }
 
+BOOST_AUTO_TEST_CASE(solve_calls) {
+	std::string s(
+		"^`.`.^\n"
+		"  @   \n");
+	sokoban::simulator sim(s);
+	BOOST_REQUIRE_NO_THROW(sim.run());
+	BOOST_CHECK(sim.solve_calls() > 0);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -285,7 +285,7 @@ BOOST_AUTO_TEST_CASE(copy) {
 		i != pits.end();
 		++i) {
 		BOOST_CHECK(std::get<1>(
-			tiles2[i->second][i->first].pit()) != i);
+			tiles2[i->second][i->first].pit()) == i);
 	}
 
 	for (sokoban::level::tile::pointer_type i = rocks.begin();

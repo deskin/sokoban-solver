@@ -292,7 +292,7 @@ BOOST_AUTO_TEST_CASE(copy) {
 		i != rocks.end();
 		++i) {
 		BOOST_CHECK(std::get<1>(
-			tiles2[i->second][i->first].rock()) != i);
+			tiles2[i->second][i->first].rock()) == i);
 	}
 }
 

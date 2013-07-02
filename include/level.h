@@ -1,6 +1,7 @@
 #ifndef SOKOBAN_LEVEL_H_
 #define SOKOBAN_LEVEL_H_
 
+#include <memory>
 #include <ostream>
 #include <set>
 #include <string>
@@ -127,7 +128,7 @@ private:
 private:
 	bool is_parsed;
 	position_type avatar_position;
-	positions_type pit_locations;
+	std::shared_ptr<positions_type> pit_locations;
 	positions_type rock_locations;
 	tiles_type tile_array;
 

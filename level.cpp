@@ -1,3 +1,4 @@
+#include <memory>
 #include <set>
 #include <string>
 #include <utility>
@@ -30,12 +31,6 @@ level::level(const level &l) :
 	rock_locations(l.rock_locations),
 	tile_array(l.tile_array)
 {
-	for (positions_type::iterator i = pit_locations.begin();
-		i != pit_locations.end();
-		++i) {
-		tile_array[i->second][i->first].set_pit(i);
-	}
-
 	for (positions_type::iterator i = rock_locations.begin();
 		i != rock_locations.end();
 		++i) {
@@ -53,7 +48,7 @@ level::avatar() const
 const level::positions_type &
 level::pits() const
 {
-	return require_parsed_or_throw(pit_locations, is_parsed);
+	return require_parsed_or_throw(*pit_locations, is_parsed);
 }
 
 const level::positions_type &
@@ -76,6 +71,7 @@ level::parse(const std::string &s)
 	size_t row = 0;
 
 	tile_array.emplace_back();
+	pit_locations = std::make_shared<positions_type>();
 
 	for (const char &c : s) {
 		if (c == '\n') {
@@ -114,7 +110,7 @@ level::parse(const std::string &s)
 			if (c == '^' || c == '6' || c == '7') {
 				valid_symbol = true;
 				tile_array[row][column].set_pit(
-					pit_locations.insert(
+					pit_locations->insert(
 						std::make_pair(
 							column,
 							row)).first);
@@ -132,11 +128,11 @@ level::parse(const std::string &s)
 		throw level_parse_exception();
 	}
 
-	if (rock_locations.size() < pit_locations.size()) {
+	if (rock_locations.size() < pit_locations->size()) {
 		throw level_parse_exception();
 	}
 
-	if (0 == pit_locations.size()) {
+	if (0 == pit_locations->size()) {
 		throw level_parse_exception();
 	}
 

@@ -129,7 +129,7 @@ private:
 	bool is_parsed;
 	position_type avatar_position;
 	std::shared_ptr<positions_type> pit_locations;
-	positions_type rock_locations;
+	std::shared_ptr<positions_type> rock_locations;
 	tiles_type tile_array;
 
 	template <template <typename> class Traits>

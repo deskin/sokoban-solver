@@ -30,14 +30,7 @@ level::level(const level &l) :
 	pit_locations(l.pit_locations),
 	rock_locations(l.rock_locations),
 	tile_array(l.tile_array)
-{
-	for (positions_type::iterator i = rock_locations.begin();
-		i != rock_locations.end();
-		++i) {
-		tile_array[i->second][i->first].set_rock(i);
-	}
-
-}
+{}
 
 const level::position_type &
 level::avatar() const
@@ -54,7 +47,7 @@ level::pits() const
 const level::positions_type &
 level::rocks() const
 {
-	return require_parsed_or_throw(rock_locations, is_parsed);
+	return require_parsed_or_throw(*rock_locations, is_parsed);
 }
 
 const level::tiles_type &
@@ -72,6 +65,7 @@ level::parse(const std::string &s)
 
 	tile_array.emplace_back();
 	pit_locations = std::make_shared<positions_type>();
+	rock_locations = std::make_shared<positions_type>();
 
 	for (const char &c : s) {
 		if (c == '\n') {
@@ -101,7 +95,7 @@ level::parse(const std::string &s)
 			if (c == '`' || c == '6') {
 				valid_symbol = true;
 				tile_array[row][column].set_rock(
-					rock_locations.insert(
+					rock_locations->insert(
 						std::make_pair(
 							column,
 							row)).first);
@@ -128,7 +122,7 @@ level::parse(const std::string &s)
 		throw level_parse_exception();
 	}
 
-	if (rock_locations.size() < pit_locations->size()) {
+	if (rock_locations->size() < pit_locations->size()) {
 		throw level_parse_exception();
 	}
 
@@ -157,11 +151,26 @@ level::move_rock(
 	const level::position_type &old_position,
 	const level::position_type &new_position)
 {
+	if (!rock_locations.unique()) {
+		std::shared_ptr<positions_type> ptr =
+			std::make_shared<positions_type>(*rock_locations);
+		{
+			using std::swap;
+			swap(ptr, rock_locations);
+		}
+
+		for (positions_type::iterator i = rock_locations->begin();
+			i != rock_locations->end();
+			++i) {
+			tile_array[i->second][i->first].set_rock(i);
+		}
+	}
+
 	const tile::pointer_tuple &rock(
 		tile_array[old_position.second][old_position.first].rock());
 	tile_array[new_position.second][new_position.first].set_rock(
-		rock_locations.insert(std::get<1>(rock), new_position));
-	rock_locations.erase(std::get<1>(rock));
+		rock_locations->insert(std::get<1>(rock), new_position));
+	rock_locations->erase(std::get<1>(rock));
 	tile_array[old_position.second][old_position.first].unset_rock();
 }
 
@@ -169,7 +178,8 @@ bool
 level::operator==(const level &rhs) const
 {
 	return (avatar_position == rhs.avatar_position) &&
-		(rock_locations == rhs.rock_locations);
+		(rock_locations == rhs.rock_locations ||
+		*rock_locations == *rhs.rock_locations);
 }
 
 

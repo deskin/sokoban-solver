@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "analyze.h"
 #include "bfs_simulator.h"
 
 BOOST_AUTO_TEST_SUITE(bfs_simulator)
@@ -16,6 +17,14 @@ BOOST_AUTO_TEST_CASE(get_steps) {
 	std::string s("6@.\n");
 	sokoban::bfs_simulator sim(s);
 	BOOST_CHECK_NO_THROW(sim.steps());
+}
+
+BOOST_AUTO_TEST_CASE(run_basic) {
+	std::string s("6@.\n");
+	sokoban::bfs_simulator sim(s);
+	BOOST_REQUIRE_NO_THROW(sim.run());
+	BOOST_CHECK(sim.win());
+	BOOST_CHECK(sokoban::is_win(sim.steps().back()));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

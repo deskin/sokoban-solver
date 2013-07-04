@@ -12,10 +12,13 @@ class bfs_simulator {
 public:
 	typedef std::vector<level> steps_type;
 
-	explicit bfs_simulator(const std::string &);
+	explicit bfs_simulator(const std::string &s);
 
 	const steps_type &steps() const { return level_steps; }
 
+	bool win() const { return true; }
+
+	void run() {}
 private:
 	steps_type level_steps;
 };

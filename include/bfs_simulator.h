@@ -16,11 +16,13 @@ public:
 
 	const steps_type &steps() const { return level_steps; }
 
-	bool win() const { return true; }
+	bool win() const;
 
-	void run() {}
+	void run();
+
 private:
 	steps_type level_steps;
+	bool has_run;
 };
 
 } // namespace sokoban

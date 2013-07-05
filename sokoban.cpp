@@ -2,8 +2,9 @@
 #include <string>
 #include <utility>
 
-#include "errors.h"
 #include "bfs_simulator.h"
+#include "errors.h"
+#include "simulator.h"
 
 namespace sok = sokoban;
 
@@ -17,12 +18,13 @@ int main(int argc, char **argv) {
 	}
 
 	try {
-		sok::bfs_simulator sim(s);
+		typedef sok::bfs_simulator simulator_type;
+		simulator_type sim(s);
 		sim.run();
 
 		if (sim.win()) {
-			const sok::bfs_simulator::steps_type &steps(
-				sim.steps());
+			const simulator_type::steps_type &steps(sim.steps());
+
 			std::cout << "Solved in " << steps.size() - 1
 				<< " moves." << std::endl;
 

@@ -3,7 +3,7 @@
 #include <utility>
 
 #include "errors.h"
-#include "simulator.h"
+#include "bfs_simulator.h"
 
 namespace sok = sokoban;
 
@@ -17,11 +17,11 @@ int main(int argc, char **argv) {
 	}
 
 	try {
-		sok::simulator sim(s);
+		sok::bfs_simulator sim(s);
 		sim.run();
 
 		if (sim.win()) {
-			const sok::simulator::steps_type &steps(
+			const sok::bfs_simulator::steps_type &steps(
 				sim.steps());
 			std::cout << "Solved in " << steps.size() - 1
 				<< " moves." << std::endl;

@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(pit_get_set) {
 	sokoban::level::positions_type s;
 	sokoban::level::tile::pointer_type i;
 	sokoban::tile t{sokoban::tile::kind::valid};
-	bool pit_valid;
+	bool pit_valid = true;
 
 	s.insert(std::make_pair<size_t, size_t>(1, 0));
 	BOOST_CHECK_NO_THROW(t.set_pit(s.begin()));
@@ -66,7 +66,7 @@ BOOST_AUTO_TEST_CASE(rock_get_set) {
 	sokoban::level::positions_type s;
 	sokoban::level::tile::pointer_type i;
 	sokoban::tile t{sokoban::tile::kind::valid};
-	bool rock_valid;
+	bool rock_valid = true;
 
 	s.insert(std::make_pair<size_t, size_t>(1, 0));
 	BOOST_CHECK_NO_THROW(t.set_rock(s.begin()));

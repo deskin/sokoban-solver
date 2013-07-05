@@ -153,7 +153,7 @@ BOOST_AUTO_TEST_CASE(parse_get_tiles) {
 		      "   ..@");
 	BOOST_REQUIRE_NO_THROW(level.parse(s));
 	const sokoban::level::tiles_type &tiles(level.tiles());
-	bool pit_valid;
+	bool pit_valid = true;
 	BOOST_CHECK_NO_THROW(
 		std::tie(
 			pit_valid,

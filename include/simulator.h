@@ -27,7 +27,7 @@ private:
 	size_t solve_call_count;
 	bool has_run;
 
-	detail::solve_status solve(size_t max_steps);
+	::detail::solve_status solve(size_t max_steps);
 
 public:
 	explicit simulator(const std::string &s);

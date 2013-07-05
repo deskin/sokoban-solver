@@ -182,5 +182,13 @@ level::operator==(const level &rhs) const
 		*rock_locations == *rhs.rock_locations);
 }
 
+bool
+level::operator<(const level &rhs) const
+{
+	return avatar_position < rhs.avatar_position ||
+		(avatar_position == rhs.avatar_position &&
+		rock_locations != rhs.rock_locations &&
+		*rock_locations < *rhs.rock_locations);
+}
 
 } // namespace sokoban

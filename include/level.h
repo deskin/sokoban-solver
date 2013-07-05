@@ -46,6 +46,8 @@ public:
 
 	bool operator==(const level &rhs) const;
 
+	bool operator<(const level &rhs) const;
+
 	bool operator!=(const level &rhs) const { return !(*this == rhs); }
 
 	template <template <typename> class Traits>

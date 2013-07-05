@@ -2,7 +2,6 @@
 #define SOKOBAN_BFS_SIMULATOR_H_
 
 #include <map>
-#include <set>
 #include <string>
 #include <vector>
 
@@ -30,6 +29,10 @@ public:
 		is_empty(false)
 	{}
 
+	bool empty() const { return is_empty; }
+
+	value_type get() const { return i; }
+
 private:
 	value_type i;
 	bool is_empty;
@@ -40,12 +43,13 @@ private:
 class bfs_simulator {
 private:
 	typedef detail::bfs_map_type map_type;
-	typedef std::set<level> set_type;
 
 public:
 	typedef std::vector<level> steps_type;
 
 	explicit bfs_simulator(const std::string &s);
+
+	size_t solve_calls() const { return move_count; }
 
 	const steps_type &steps() const { return level_steps; }
 
@@ -56,11 +60,14 @@ public:
 private:
 	steps_type level_steps;
 	bool has_run;
+	size_t move_count;
 
 	bool solve(map_type &current,
 		map_type &next,
-		set_type &current_set,
-		set_type &next_set);
+		map_type &current_set,
+		map_type &next_set);
+	
+	void fill_steps(const map_type::const_iterator &i);
 };
 
 } // namespace sokoban

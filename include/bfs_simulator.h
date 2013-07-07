@@ -25,7 +25,7 @@ public:
 	{}
 
 	explicit level_pointer(value_type i) :
-		i(i),
+		i(std::move(i)),
 		is_empty(false)
 	{}
 
@@ -64,8 +64,8 @@ private:
 
 	bool solve(map_type &current,
 		map_type &next,
-		map_type &current_set,
-		map_type &next_set);
+		std::vector<map_type::iterator> &current_set,
+		std::vector<map_type::iterator> &next_set);
 	
 	void fill_steps(const map_type::const_iterator &i);
 };

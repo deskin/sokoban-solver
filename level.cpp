@@ -24,14 +24,6 @@ require_parsed_or_throw(const T &val, bool is_parsed)
 
 namespace sokoban {
 
-level::level(const level &l) :
-	is_parsed(l.is_parsed),
-	avatar_position(l.avatar_position),
-	pit_locations(l.pit_locations),
-	rock_locations(l.rock_locations),
-	tile_array(l.tile_array)
-{}
-
 const level::position_type &
 level::avatar() const
 {

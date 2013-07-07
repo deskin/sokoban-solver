@@ -26,7 +26,9 @@ public:
 		tile_array()
 	{}
 
-	level(const level &l);
+	level(const level &) = default;
+
+	level(level &&) = default;
 
 	const position_type &avatar() const;
 
@@ -43,6 +45,10 @@ public:
 		const position_type &new_position);
 
 	void parse(const std::string &s);
+
+	level &operator=(const level &) = default;
+
+	level &operator=(level &&) = default;
 
 	bool operator==(const level &rhs) const;
 

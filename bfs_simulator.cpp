@@ -61,14 +61,15 @@ bfs_simulator::solve(bfs_simulator::map_type &current,
 		} else {
 			level_mover mover(i->first);
 
-			for (const level &l: mover) {
+			for (level &l: mover) {
 				++move_count;
 				map_type::iterator n = next.lower_bound(l);
 
 				if (n == next.end() || n->first != l) {
 					n = next.insert(n,
 						std::make_pair(l, i->second));
-					next_set.insert(std::make_pair(l,
+					next_set.insert(std::make_pair(
+						std::move(l),
 						detail::level_pointer(n)));
 				}
 			}

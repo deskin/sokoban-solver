@@ -34,14 +34,13 @@ bfs_simulator::run()
 {
 	has_run = true;
 	map_type evens;
-	map_type initial_set;
+	std::vector<map_type::iterator> initial_set;
 	map_type odds;
-	map_type odd_set;
+	std::vector<map_type::iterator> odd_set;
 
 	auto i = evens.insert(std::make_pair(level_steps[0],
 		detail::level_pointer()));
-	initial_set.insert(std::make_pair(level_steps[0],
-		detail::level_pointer(i.first)));
+	initial_set.emplace_back(std::move(i).first);
 
 	solve(evens, odds, initial_set, odd_set);
 }
@@ -49,14 +48,12 @@ bfs_simulator::run()
 bool
 bfs_simulator::solve(bfs_simulator::map_type &current,
 	bfs_simulator::map_type &next,
-	bfs_simulator::map_type &current_set,
-	bfs_simulator::map_type &next_set)
+	std::vector<bfs_simulator::map_type::iterator> &current_set,
+	std::vector<bfs_simulator::map_type::iterator> &next_set)
 {
-	for (map_type::const_iterator i = current_set.cbegin();
-		i != current_set.cend();
-		++i) {
+	for (const map_type::iterator &i : current_set) {
 		if (is_win(i->first)) {
-			fill_steps(i->second.get());
+			fill_steps(i);
 			return true;
 		} else {
 			level_mover mover(i->first);
@@ -66,21 +63,19 @@ bfs_simulator::solve(bfs_simulator::map_type &current,
 				map_type::iterator n = next.lower_bound(l);
 
 				if (n == next.end() || n->first != l) {
-					n = next.insert(n,
-						std::make_pair(l, i->second));
-					next_set.insert(std::make_pair(
-						std::move(l),
-						detail::level_pointer(n)));
+					n = next.insert(n, std::make_pair(l,
+						detail::level_pointer(i)));
+					next_set.emplace_back(std::move(n));
 				}
 			}
 		}
 	}
 
-	current_set.clear();
-
 	if (next_set.size() == 0) {
 		return false;
 	}
+
+	current_set.resize(0);
 
 	return solve(next, current, next_set, current_set);
 }

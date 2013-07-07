@@ -13,13 +13,22 @@ class level_mover {
 	levels_container levels;
 
 public:
-	typedef levels_container::const_iterator iterator;
+	typedef levels_container::iterator iterator;
+	typedef levels_container::const_iterator const_iterator;
 
 	explicit level_mover(const level &l);
 
-	iterator begin() const { return levels.cbegin(); }
+	iterator begin() { return levels.begin(); }
 
-	iterator end() const { return levels.cend(); }
+	const_iterator begin() const { return cbegin(); }
+
+	const_iterator cbegin() const { return levels.cbegin(); }
+
+	iterator end() { return levels.end(); }
+
+	const_iterator end() const { return cend(); }
+
+	const_iterator cend() const { return levels.cend(); }
 
 	size_t size() const { return levels.size(); }
 };

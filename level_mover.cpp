@@ -9,6 +9,8 @@ namespace sokoban {
 level_mover::level_mover(const level &l) :
 	levels()
 {
+	levels.reserve(4);
+
 	if (can_move(l, direction::up())) {
 		levels.emplace_back(move(l, direction::up()));
 	}
@@ -24,8 +26,6 @@ level_mover::level_mover(const level &l) :
 	if (can_move(l, direction::left())) {
 		levels.emplace_back(move(l, direction::left()));
 	}
-
-	levels.reserve(levels.size());
 }
 
 }

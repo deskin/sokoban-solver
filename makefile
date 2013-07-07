@@ -37,7 +37,7 @@ STDFLAGS ?= -std=c++11
 ALL_CFLAGS = $(CFLAGS) $(WARNFLAGS) $(OPTFLAGS) $(STDFLAGS)
 
 ifeq ($(CC),clang)
-    INCLUDES += -I/usr/lib/gcc/i686-pc-cygwin/4.7.2/include -I/usr/lib/gcc/i686-pc-cygwin/4.7.2/include/c++ -I/usr/lib/gcc/i686-pc-cygwin/4.7.2/include/c++/i686-pc-cygwin
+    INCLUDES += -I/usr/lib/gcc/i686-pc-cygwin/4.7.3/include -I/usr/lib/gcc/i686-pc-cygwin/4.7.3/include/c++ -I/usr/lib/gcc/i686-pc-cygwin/4.7.3/include/c++/i686-pc-cygwin
 endif
 
 all: $(EXEPATH)

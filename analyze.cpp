@@ -13,7 +13,7 @@ is_win(const level &l)
 	const level::positions_type &pits(l.pits());
 
 	for (const level::position_type &pit: pits) {
-		if (!std::get<0>(tiles[pit.second][pit.first].rock())) {
+		if (!std::get<0>((*tiles[pit.second])[pit.first]->rock())) {
 			return false;
 		}
 	}

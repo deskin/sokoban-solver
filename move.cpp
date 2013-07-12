@@ -175,9 +175,7 @@ move_(const level &l, std::integral_constant<direction::value, D>)
 	}
 
 	level new_level(l);
-	level::positions_type pits(new_level.pits());
-	level::positions_type rocks(new_level.rocks());
-	level::tiles_type tiles(new_level.tiles());
+	const level::tiles_type &tiles(new_level.tiles());
 
 	check_position(
 		tiles,
@@ -185,7 +183,7 @@ move_(const level &l, std::integral_constant<direction::value, D>)
 		new_avatar.first,
 		Direction());
 
-	level::tile &new_avatar_tile(
+	const level::tile &new_avatar_tile(
 		tiles[new_avatar.second][new_avatar.first]);
 
 	level::tile::pointer_tuple rock(new_avatar_tile.rock());

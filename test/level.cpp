@@ -157,9 +157,11 @@ BOOST_AUTO_TEST_CASE(parse_get_tiles) {
 	BOOST_CHECK_NO_THROW(
 		std::tie(
 			pit_valid,
-			std::ignore) = tiles[0][3].pit());
+			std::ignore) = (*tiles[0])[3]->pit());
 	BOOST_CHECK(!pit_valid);
-	BOOST_CHECK_THROW(tiles[1][0].rock(), sokoban::tile_invalid_exception);
+	BOOST_CHECK_THROW(
+		(*tiles[1])[0]->rock(),
+		sokoban::tile_invalid_exception);
 }
 
 BOOST_AUTO_TEST_CASE(tiles_end_not_empty) {
@@ -168,7 +170,7 @@ BOOST_AUTO_TEST_CASE(tiles_end_not_empty) {
 		      "   ..@\n");
 	BOOST_REQUIRE_NO_THROW(level.parse(s));
 	const sokoban::level::tiles_type &tiles(level.tiles());
-	BOOST_CHECK_NE(tiles.rbegin()->size(), 0);
+	BOOST_CHECK_NE((*tiles.rbegin())->size(), 0);
 }
 
 BOOST_AUTO_TEST_CASE(parse_tiles_not_empty) {
@@ -219,7 +221,7 @@ BOOST_AUTO_TEST_CASE(parse_get_tile_avatar) {
 		"   ..@\n");
 	BOOST_REQUIRE_NO_THROW(level.parse(s));
 	const sokoban::level::tiles_type &tiles(level.tiles());
-	BOOST_CHECK(tiles[1][5].avatar());
+	BOOST_CHECK((*tiles[1])[5]->avatar());
 }
 
 BOOST_AUTO_TEST_CASE(ostream_insertion) {
@@ -246,8 +248,8 @@ BOOST_AUTO_TEST_CASE(move_avatar) {
 	const sokoban::level::tiles_type &tiles(level.tiles());
 	BOOST_CHECK_EQUAL(avatar_new.first, avatar.first);
 	BOOST_CHECK_EQUAL(avatar_new.second, avatar.second);
-	BOOST_CHECK(!tiles[avatar_old.second][avatar_old.first].avatar());
-	BOOST_CHECK(tiles[avatar_new.second][avatar_new.first].avatar());
+	BOOST_CHECK(!(*tiles[avatar_old.second])[avatar_old.first]->avatar());
+	BOOST_CHECK((*tiles[avatar_new.second])[avatar_new.first]->avatar());
 }
 
 BOOST_AUTO_TEST_CASE(move_rock) {
@@ -262,9 +264,9 @@ BOOST_AUTO_TEST_CASE(move_rock) {
 	const sokoban::level::tiles_type &tiles(level.tiles());
 	BOOST_CHECK(
 		!std::get<0>(
-			tiles[rock_old.second][rock_old.first].rock()));
+			(*tiles[rock_old.second])[rock_old.first]->rock()));
 	const sokoban::level::tile::pointer_tuple &rock(
-		tiles[rock_new.second][rock_new.first].rock());
+		(*tiles[rock_new.second])[rock_new.first]->rock());
 	BOOST_CHECK(std::get<0>(rock));
 	BOOST_CHECK_EQUAL(rock_new.first, std::get<1>(rock)->first);
 	BOOST_CHECK_EQUAL(rock_new.second, std::get<1>(rock)->second);
@@ -285,14 +287,14 @@ BOOST_AUTO_TEST_CASE(copy) {
 		i != pits.end();
 		++i) {
 		BOOST_CHECK(std::get<1>(
-			tiles2[i->second][i->first].pit()) == i);
+			(*tiles2[i->second])[i->first]->pit()) == i);
 	}
 
 	for (sokoban::level::tile::pointer_type i = rocks.begin();
 		i != rocks.end();
 		++i) {
 		BOOST_CHECK(std::get<1>(
-			tiles2[i->second][i->first].rock()) == i);
+			(*tiles2[i->second])[i->first]->rock()) == i);
 	}
 }
 

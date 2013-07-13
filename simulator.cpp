@@ -14,8 +14,8 @@ count_level_arrangements(const sokoban::level &l)
 {
 	size_t open_tiles = 0;
 	for (const auto &row: l.tiles()) {
-		for (const auto &tile: row) {
-			if (tile.is_valid()) {
+		for (const auto &tile: *row) {
+			if (tile->is_valid()) {
 				++open_tiles;
 			}
 		}

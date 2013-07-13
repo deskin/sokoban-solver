@@ -16,7 +16,9 @@ public:
 	class tile;
 	typedef std::pair<size_t, size_t> position_type;
 	typedef std::set<position_type> positions_type;
-	typedef std::vector<std::vector<tile>> tiles_type;
+	typedef std::vector<
+		std::shared_ptr<
+			std::vector<std::shared_ptr<tile>>>> tiles_type;
 
 	level() :
 		is_parsed(false),
@@ -145,8 +147,8 @@ private:
 	ostream_insert(std::basic_ostream<char, Traits<char> > &os) const
 	{
 		for (const auto &v: tile_array) {
-			for (const auto &t: v) {
-				os << t;
+			for (const auto &t: *v) {
+				os << *t;
 			}
 
 			os << '\n';

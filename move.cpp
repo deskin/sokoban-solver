@@ -48,7 +48,7 @@ check_position(
 	size_t &column,
 	direction::right)
 {
-	if (tiles[row].size() - 1 == column) {
+	if (tiles[row]->size() - 1 == column) {
 		return false;
 	}
 
@@ -126,7 +126,7 @@ can_move(
 		return false;
 	}
 
-	const level::tile &tile(tiles[row][column]);
+	const level::tile &tile(*(*tiles[row])[column]);
 
 	if (!tile.is_valid()) {
 		return false;
@@ -183,8 +183,8 @@ move_(const level &l, std::integral_constant<direction::value, D>)
 		new_avatar.first,
 		Direction());
 
-	const level::tile &new_avatar_tile(
-		tiles[new_avatar.second][new_avatar.first]);
+	level::tile &new_avatar_tile(
+		*(*tiles[new_avatar.second])[new_avatar.first]);
 
 	level::tile::pointer_tuple rock(new_avatar_tile.rock());
 

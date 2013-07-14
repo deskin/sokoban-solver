@@ -7,10 +7,6 @@
 #include "errors.h"
 #include "level.h"
 
-#include "deskin/shared_ptr_cow.h"
-
-namespace cow = deskin::copy_on_write;
-
 namespace {
 
 template <typename T>
@@ -37,7 +33,7 @@ level::avatar() const
 const level::positions_type &
 level::pits() const
 {
-	return require_parsed_or_throw(*pit_locations, is_parsed);
+	return require_parsed_or_throw(immutable_data->pits, is_parsed);
 }
 
 const level::positions_type &
@@ -49,7 +45,7 @@ level::rocks() const
 const level::tiles_type &
 level::tiles() const
 {
-	return require_parsed_or_throw(tile_array, is_parsed);
+	return require_parsed_or_throw(immutable_data->tiles, is_parsed);
 }
 
 void
@@ -59,54 +55,43 @@ level::parse(const std::string &s)
 	size_t column = 0;
 	size_t row = 0;
 
-	tile_array.emplace_back(
-		std::make_shared<std::vector<std::shared_ptr<tile>>>());
-	pit_locations = std::make_shared<positions_type>();
+	std::shared_ptr<const_data> data = std::make_shared<const_data>();
+	data->tiles.emplace_back();
 	rock_locations = std::make_shared<positions_type>();
 
 	for (const char &c : s) {
 		if (c == '\n') {
-			if (tile_array[row]->size() == 0) {
+			if (data->tiles[row].size() == 0) {
 				throw level_parse_exception();
 			}
 
 			++row;
 			column = 0;
-			tile_array.emplace_back(
-				std::make_shared<
-					std::vector<std::shared_ptr<tile>>>());
+			data->tiles.emplace_back();
 		} else {
 			bool valid_symbol = (c == ' ');
 
-			tile_array[row]->emplace_back(std::make_shared<tile>(
-				valid_symbol ?
-					tile::kind::invalid :
-					tile::kind::valid));
+			data->tiles[row].push_back(!valid_symbol);
 
 			if (c == '@' || c == '7') {
 				valid_symbol = true;
 				++avatar_count;
 				avatar_position.first = column;
 				avatar_position.second = row;
-				(*tile_array[row])[column]->set_avatar();
 			}
 
 			if (c == '`' || c == '6') {
 				valid_symbol = true;
-				(*tile_array[row])[column]->set_rock(
-					rock_locations->insert(
-						std::make_pair(
-							column,
-							row)).first);
+				rock_locations->insert(std::make_pair(
+					column,
+					row));
 			}
 
 			if (c == '^' || c == '6' || c == '7') {
 				valid_symbol = true;
-				(*tile_array[row])[column]->set_pit(
-					pit_locations->insert(
-						std::make_pair(
-							column,
-							row)).first);
+				data->pits.insert(std::make_pair(
+					column,
+					row));
 			}
 
 			if (!valid_symbol && c != '.') {
@@ -121,30 +106,26 @@ level::parse(const std::string &s)
 		throw level_parse_exception();
 	}
 
-	if (rock_locations->size() < pit_locations->size()) {
+	if (rock_locations->size() < data->pits.size()) {
 		throw level_parse_exception();
 	}
 
-	if (0 == pit_locations->size()) {
+	if (0 == data->pits.size()) {
 		throw level_parse_exception();
 	}
 
-	if (tile_array[row]->size() == 0) {
-		tile_array.pop_back();
+	if (data->tiles[row].size() == 0) {
+		data->tiles.pop_back();
 	}
 
 	is_parsed = true;
+
+	immutable_data = data;
 }
 
 void
 level::move_avatar(const level::position_type &new_position)
 {
-	cow::copy_if_shared((*cow::copy_if_shared(
-		tile_array[avatar_position.second]))[avatar_position.first])
-			->unset_avatar();
-	cow::copy_if_shared((*cow::copy_if_shared(
-		tile_array[new_position.second]))[new_position.first])
-			->set_avatar();
 	avatar_position = new_position;
 }
 
@@ -154,29 +135,18 @@ level::move_rock(
 	const level::position_type &new_position)
 {
 	if (!rock_locations.unique()) {
-		cow::copy_shared(rock_locations);
-
-		for (positions_type::iterator i = rock_locations->begin();
-			i != rock_locations->end();
-			++i) {
-			cow::copy_if_shared((*cow::copy_if_shared(
-				tile_array[i->second]))[i->first])
-					->set_rock(i);
+		std::shared_ptr<positions_type> ptr =
+			std::make_shared<positions_type>(*rock_locations);
+		{
+			using std::swap;
+			swap(ptr, rock_locations);
 		}
 	}
 
-	const tile::pointer_tuple &rock(
-		(*tile_array[old_position.second])[old_position.first]
-			->rock());
-	cow::copy_if_shared((*cow::copy_if_shared(
-		tile_array[new_position.second]))[new_position.first])
-			->set_rock(rock_locations->insert(
-				std::get<1>(rock),
-				new_position));
-	rock_locations->erase(std::get<1>(rock));
-	cow::copy_if_shared((*cow::copy_if_shared(
-		tile_array[old_position.second]))[old_position.first])
-			->unset_rock();
+	positions_type::const_iterator rock(
+		rock_locations->find(old_position));
+		rock_locations->insert(rock, new_position);
+	rock_locations->erase(rock);
 }
 
 bool

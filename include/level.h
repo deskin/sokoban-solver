@@ -13,17 +13,15 @@ namespace sokoban {
 
 class level {
 public:
-	class tile;
 	typedef std::pair<size_t, size_t> position_type;
 	typedef std::set<position_type> positions_type;
-	typedef std::vector<std::vector<tile>> tiles_type;
+	typedef std::vector<std::vector<bool> > tiles_type;
 
 	level() :
 		is_parsed(false),
 		avatar_position(0, 0),
-		pit_locations(),
-		rock_locations(),
-		tile_array()
+		immutable_data(),
+		rock_locations()
 	{}
 
 	level(const level &) = default;
@@ -61,92 +59,48 @@ public:
 	std::basic_ostream<char, Traits<char> > &
 	operator<<(std::basic_ostream<char, Traits<char> > &os, const level &l);
 
-class tile {
-public:
-	typedef positions_type::iterator pointer_type;
-	typedef std::tuple<bool, pointer_type> pointer_tuple;
-
-	enum class kind {
-		invalid,
-		valid
+private:
+	struct const_data {
+		positions_type pits;
+		tiles_type tiles;
 	};
 
-	explicit tile(kind k) :
-		valid(kind::valid == k),
-		has_avatar(false),
-		pit_pointer(false, pointer_type()),
-		rock_pointer(false, pointer_type())
-	{}
-
-	bool is_valid() const { return valid; }
-
-	bool avatar() const;
-
-	void set_avatar();
-
-	void unset_avatar();
-
-	const pointer_tuple &pit() const;
-
-	void set_pit(pointer_type i);
-
-	void unset_pit();
-
-	const pointer_tuple &rock() const;
-
-	void set_rock(pointer_type i);
-
-	void unset_rock();
-
-	template <template <typename> class Traits>
-	friend
-	std::basic_ostream<char, Traits<char> > &
-	operator<<(std::basic_ostream<char, Traits<char> > &os, const tile &t);
-
-private:
-	bool valid;
-	bool has_avatar;
-	pointer_tuple pit_pointer;
-	pointer_tuple rock_pointer;
-
-	template <template <typename> class Traits>
-	void
-	ostream_insert(std::basic_ostream<char, Traits<char> > &os) const
-	{
-		if (!valid) {
-			os << ' ';
-		} else if (std::get<0>(pit_pointer)) {
-			if (has_avatar) {
-				os << '7';
-			} else if (std::get<0>(rock_pointer)) {
-				os << '6';
-			} else {
-				os << '^';
-			}
-		} else if (std::get<0>(rock_pointer)) {
-			os << '`';
-		} else if (has_avatar) {
-			os << '@';
-		} else {
-			os << '.';
-		}
-	}
-};
-
-private:
 	bool is_parsed;
 	position_type avatar_position;
-	std::shared_ptr<positions_type> pit_locations;
+	std::shared_ptr<const const_data> immutable_data;
 	std::shared_ptr<positions_type> rock_locations;
-	tiles_type tile_array;
 
 	template <template <typename> class Traits>
 	void
 	ostream_insert(std::basic_ostream<char, Traits<char> > &os) const
 	{
-		for (const auto &v: tile_array) {
-			for (const auto &t: v) {
-				os << t;
+		for (size_t r = 0; r < immutable_data->tiles.size(); ++r) {
+			const std::vector<bool> &v = immutable_data->tiles[r];
+			for (size_t c = 0; c < v.size(); ++c) {
+				if (!v[c]) {
+					os << ' ';
+				} else {
+					const position_type loc =
+						std::make_pair(c, r);
+					if (pits().find(loc) !=
+						pits().end()) {
+						if (loc == avatar_position) {
+							os << '7';
+						} else if (rocks().find(loc) !=
+							rocks().end()) {
+							os << '6';
+						} else {
+							os << '^';
+						}
+					} else if (loc == avatar_position) {
+						os << '@';
+					} else if (rocks().find(loc) !=
+						rocks().end()) {
+						os << '`';
+					} else {
+						os << '.';
+					}
+				}
 			}
 
 			os << '\n';
@@ -159,14 +113,6 @@ std::basic_ostream<char, Traits<char> > &
 operator<<(std::basic_ostream<char, Traits<char> > &os, const level &l)
 {
 	l.ostream_insert(os);
-	return os;
-}
-
-template <template <typename> class Traits>
-std::basic_ostream<char, Traits<char> > &
-operator<<(std::basic_ostream<char, Traits<char> > &os, const level::tile &t)
-{
-	t.ostream_insert(os);
 	return os;
 }
 

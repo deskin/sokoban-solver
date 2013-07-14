@@ -20,7 +20,7 @@ typedef std::false_type rock;
 template <direction::value D, bool M>
 bool
 can_move(
-	const level::tiles_type &tiles,
+	const level &l,
 	size_t row,
 	size_t column,
 	std::integral_constant<direction::value, D>,
@@ -89,20 +89,20 @@ check_position(
 template <direction::value D>
 bool
 check_rock(
-	const level::tiles_type &tiles,
+	const level &l,
 	size_t row,
 	size_t column,
 	std::integral_constant<direction::value, D>,
 	move_type::avatar)
 {
 	typedef std::integral_constant<direction::value, D> Direction;
-	return can_move(tiles, row, column, Direction(), move_type::rock());
+	return can_move(l, row, column, Direction(), move_type::rock());
 }
 
 template <direction::value D>
 bool
 check_rock(
-	const level::tiles_type &,
+	const level &,
 	size_t,
 	size_t,
 	std::integral_constant<direction::value, D>,
@@ -114,7 +114,7 @@ check_rock(
 template <direction::value D, bool M>
 bool
 can_move(
-	const level::tiles_type &tiles,
+	const level &l,
 	size_t row,
 	size_t column,
 	std::integral_constant<direction::value, D>,
@@ -122,17 +122,18 @@ can_move(
 {
 	typedef std::integral_constant<direction::value, D> Direction;
 	typedef std::integral_constant<bool, M> MoveType;
-	if (!check_position(tiles, row, column, Direction())) {
+	if (!check_position(l.tiles(), row, column, Direction())) {
 		return false;
 	}
 
-	const level::tile &tile(tiles[row][column]);
+	const bool tile_valid(l.tiles()[row][column]);
 
-	if (!tile.is_valid()) {
+	if (!tile_valid) {
 		return false;
-	} else if (std::get<0>(tile.rock())) {
+	} else if (l.rocks().end() !=
+		l.rocks().find(std::make_pair(column, row))) {
 		return check_rock(
-			tiles,
+			l,
 			row,
 			column,
 			Direction(),
@@ -150,7 +151,7 @@ can_move_(const level &l, std::integral_constant<direction::value, D>)
 	const level::position_type &avatar(l.avatar());
 
 	return can_move(
-		l.tiles(),
+		l,
 		avatar.second,
 		avatar.first,
 		Direction(),
@@ -166,7 +167,7 @@ move_(const level &l, std::integral_constant<direction::value, D>)
 	level::position_type new_avatar(avatar);
 
 	if (!can_move(
-		l.tiles(),
+		l,
 		avatar.second,
 		avatar.first,
 		Direction(),
@@ -183,12 +184,7 @@ move_(const level &l, std::integral_constant<direction::value, D>)
 		new_avatar.first,
 		Direction());
 
-	const level::tile &new_avatar_tile(
-		tiles[new_avatar.second][new_avatar.first]);
-
-	level::tile::pointer_tuple rock(new_avatar_tile.rock());
-
-	if (std::get<0>(rock)) {
+	if (new_level.rocks().end() != new_level.rocks().find(new_avatar)) {
 		level::position_type new_rock(new_avatar);
 
 		check_position(
